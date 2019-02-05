@@ -1,0 +1,742 @@
+// layout
+.l
+  &-content
+    grid-column: c-start / c-end
+  &-row
+    grid-column: p-start / p-end
+    width: 100%
+  &-header
+    @include shadow(1)
+    background-color: $darkBlue3
+    color: #fff
+    .wrapper
+      display: grid
+      justify-content: space-between
+      grid-template-rows: 50px
+      grid-auto-flow: column
+      align-items: stretch
+      .logo
+        text-decoration: none
+        img
+          height: 100%
+      .menu
+        position: relative
+        ul
+          z-index: 3
+          letter-spacing: -5px
+          margin: 0
+          min-height: 100%
+          padding: 0
+          @include respond-to(md)
+            display: none
+            position: absolute
+            right: -15px
+            top: 50px
+            background-color: $darkBlue3
+            @include shadow(1)
+            li
+              width: 100%
+          li
+            letter-spacing: normal
+            height: 100%
+            max-height: 100%
+            display: inline-block
+            a
+              width: 100%
+              height: 100%
+              text-decoration: none
+              font-size: 1.1rem
+              display: block
+              padding: 0 15px
+              line-height: 50px
+              &:hover
+                background-color: $darkBlue1
+              @include respond-to(md)
+                padding: 0 30px
+            &.game-picker
+              text-transform: uppercase
+              position: relative
+              z-index: 5
+              .fas
+                margin-left: 15px
+                vertical-align: middle
+              a
+                background-size: cover
+                background-position: center center
+                white-space: nowrap
+                cursor: default
+                &.dota
+                  background-image: url(../../static/common/game-button-bg/dota.png)
+                  background-color: $dotaPrimary
+                  &:hover
+                    background-color: $dotaColorful
+              .games-list
+                @include shadow(2)
+                display: none
+                width: 100%
+                position: absolute
+                a
+                  cursor: pointer
+        .open-menu-mobile
+          display: none
+          @include respond-to(md)
+            display: grid
+            height: 100%
+            justify-content: center
+            align-items: center
+            font-size: 2rem
+            cursor: pointer
+  &-banner
+    width: 100%
+    background-image: url(../../static/tourneys-page/dota-banner.jpg)
+    background-size: cover
+    background-position: center center
+    position: relative
+    &:after
+      content: ""
+      position: absolute
+      left: 0
+      top: 0
+      width: 100%
+      height: 100%
+      background-color: $colorfulBlue
+      opacity: .65
+    .container
+      z-index: 1
+      .wrapper
+        padding: 50px 0
+        color: #fff
+        h1
+          font-size: 1.2rem
+          margin: 0
+          strong
+            font-weight: 100
+        .title
+          display: grid
+          align-items: center
+          grid-auto-flow: column
+          justify-content: flex-start
+          h2
+            font-size: 10rem
+            font-weight: 100
+            text-transform: uppercase
+            margin: 0
+            line-height: 1
+          img
+            height: 120px
+            margin-right: 15px
+        @include respond-to(md)
+          .title
+            h2
+              font-size: 5rem
+            img
+              height: 70px
+              margin-right: 5px
+          h1
+            font-size: 1rem
+        @include respond-to(sm)
+          .title
+            justify-content: center
+            h2
+              font-size: 4rem
+            img
+              height: 60px
+              margin-right: 5px
+          h1
+            margin-top: 10px
+            text-align: center
+  &-filters
+    padding: 15px 0 0 0  
+    .wrapper
+      display: flex
+      flex-wrap: wrap
+      justify-content: flex-start
+      align-items: center
+      grid-gap: 10px 
+      .filter-button
+        margin: 0 10px 5px 0
+        cursor: pointer
+        @include shadow(1)
+        @include respond-to(md)
+          margin: 0 7.5px 10px 0
+        &.calendar
+          .fas
+            margin-right: 5px
+        &.select
+          position: relative
+          cursor: pointer
+          select
+            font-size: inherit
+            padding-right: 30px
+          .fas
+            position: absolute
+            right: 10px
+            top: 10px
+
+  &-tourneys-list
+    padding: 15px 0 15px 0
+    .container
+      .wrapper
+        display: grid
+        grid-template-columns: repeat(3, 1fr) 
+        grid-gap: 20px 15px
+        @include respond-to(lg)
+          grid-template-columns: repeat(2, 1fr)
+        @include respond-to(md)
+          grid-template-columns: repeat(1, 1fr)  
+      .loading-tourneys
+        width: 100%
+        display: grid
+        justify-content: center
+        align-items: center
+        font-size: 3rem
+        padding: 45px 0 30px 0
+  &-footer
+    background-color: $darkBlue1
+    padding: 30px 0
+  &-tourney
+    &.popup
+      max-width: 100%
+      position: fixed
+      top: 0
+      right: 0
+      background-color: $darkBlue2
+      height: 100%
+      overflow-x: auto
+      z-index: 6
+      @include shadow(3)
+      &:before
+        content: ""
+        position: fixed
+        height: 100%
+        width: 100%
+        background-color: #222
+        opacity: .75
+        top: 0
+        left: 0
+        z-index: -1
+    .bg
+      background-image: url(../../static/tourneys-page/dota-tourney-banner.jpg)
+      background-position: center center
+      background-size: cover
+    .container
+      z-index: 1
+      background-color: $darkBlue3
+      .header
+        background-color: $darkBlue3
+        padding: 0px 30px
+        display: grid
+        justify-content: space-between
+        grid-auto-flow: column
+        align-items: center
+        @include respond-to(sm)
+          padding-left: 15px
+          padding-right: 15px
+        .arrow-back
+          cursor: pointer
+          transition: .25s ease
+          font-size: 2.5rem
+          &:hover
+            color: $paleBlue
+        .to-full
+          text-transform: uppercase
+          font-size: .9rem
+          text-decoration: none
+          font-weight: 400
+          .fas
+            margin-right: 5px
+          &:hover
+            color: $paleBlue
+      .hat
+        padding: 30px
+        position: relative
+        z-index: 5
+        display: grid
+        grid-auto-flow: column
+        grid-template-columns: 1fr 1fr
+        @include respond-to(lg)
+          grid-gap: 30px
+          grid-auto-flow: row
+          grid-template-columns: auto
+        @include respond-to(md)
+          grid-gap: 20px
+        @include respond-to(sm)
+          padding-left: 15px
+          padding-right: 15px
+        &:after
+          position: absolute
+          content: ""
+          height: 100%
+          width: 100%
+          background-color: $colorfulBlue
+          top: 0
+          left: 0
+          z-index: 0
+          opacity: .65
+        .short-info
+          z-index: 1
+          display: grid
+          justify-content: center
+          h1
+            font-size: 2rem
+            font-weight: 600
+            margin: 0
+            text-align: center
+          .attributes
+            display: grid
+            grid-auto-flow: column
+            justify-content: space-around
+            margin-top: 5px  
+            .item
+              font-size: 1.1rem
+              text-transform: uppercase
+          .price-and-reg
+            margin-top: 15px
+            display: grid
+            grid-auto-flow: column
+            align-items: center
+            justify-content: space-around
+            .price
+              font-size: 3rem
+              font-weight: 400
+              span
+                display: block
+                line-height: 1
+                text-align: center
+                &.label
+                  font-size: .8rem
+                  font-weight: 100
+                  text-transform: uppercase
+              @include respond-to(sm)
+                font-size: 2.4rem
+                span
+                  &.label
+                    font-size: .7rem 
+          .button
+            background-color: #fff
+            color: #222
+            margin-top: 0
+            &:hover
+              color: #fff
+          @include respond-to(md)
+            h1
+              font-size: 1.8rem  
+            .attributes 
+              justify-content: space-between
+              margin-top: 10px 
+              .item
+                font-size: 1rem  
+            .price-and-reg
+              margin-top: 10px
+        .timer
+          z-index: 1
+          display: grid
+          align-items: center
+          grid-auto-flow: column
+          grid-auto-columns: 1fr
+          max-width: 450px
+          margin: auto
+          grid-gap: 30px
+          .item
+            text-align: center
+            .num
+              font-size: 5rem
+              font-weight: 100
+              line-height: .9
+            .label
+              font-size: .9rem
+              line-height: 1
+          @include respond-to(lg)
+            grid-gap: 25px
+            .item
+              .num
+                font-size: 4rem
+          @include respond-to(sm)
+            grid-gap: 20px
+            .item
+              .num
+                font-size: 3rem
+      .content
+        padding: 30px 0
+        display: grid
+        grid-auto-flow: row
+        grid-template-columns: 4fr 3fr 3fr
+        grid-template-rows: auto auto
+        grid-gap: 20px
+        align-items: flex-start
+        @include respond-to(lg)
+          grid-template-columns: 1fr 1fr
+        @include respond-to(md)
+          grid-template-columns: 1fr
+        .column
+          display: grid
+          @include respond-to(lg)
+            &.wide
+              grid-column: 1/3
+          @include respond-to(md)
+            &.wide
+              grid-column: 1/2
+          .item
+            .block-header
+              grid-auto-flow: column
+              justify-content: flex-start
+              align-items: center
+            .block-content
+              padding: 10px
+              display: block
+            b
+              font-weight: 600
+            ul
+              padding-left: 20px
+            .organisator-header
+              padding: 15px 10px
+              justify-content: center
+            .organisator-content
+              padding: 20px 10px
+              h2
+                font-size: 1.6rem
+                font-weight: 100
+                text-transform: uppercase
+                text-align: center
+                margin: 0
+              p
+                margin: 0
+                text-align: center
+                a
+                  text-decoration: none
+                  color: $lightBlue
+                  &:hover
+                    color: $paleBlue
+            .players-header
+              justify-content: space-between
+              .unactive
+                margin-left: 7px
+                font-size: .9em
+              .add-player-button
+                margin-top: 0
+                padding: 0px
+                height: 40px
+                width: 40px
+                display: grid
+                justify-content: center
+                align-items: center
+                border-radius: 50%
+                cursor: pointer
+                &:after
+                  border-radius: 50%
+            .players-content
+              padding: 0
+              .item
+                display: grid
+                grid-template-columns: 4fr 3fr 3fr
+                padding: 10px 10px
+                &:nth-child(even)
+                  background-color: $darkBlue2
+                &:first-child
+                  color: #626B7A
+                  padding-top: 5px
+                  padding-bottom: 5px
+        .recommended
+          grid-column: 1/4
+          @include respond-to(lg)
+            grid-column: 1/3
+          @include respond-to(md)
+            grid-column: 1/2
+          .section
+            .block-header
+              .unactive
+                font-size: .9rem
+                margin-left: 5px
+            .block-content
+              display: grid
+              grid-template-columns: repeat(3,1fr)
+              grid-gap: 20px 15px
+              @include respond-to(lg)
+                grid-template-columns: 1fr 1fr
+              @include respond-to(md)
+                grid-template-columns: 1fr 
+  &-panel-wrapper
+    overflow-y: hidden
+    display: grid
+    grid-template-columns: 300px 1fr
+    min-height: 100vh
+    @include respond-to(lg)
+      grid-template-columns: 1fr
+    .l-admin-sider
+      z-index: 5
+      display: grid
+      grid-template-rows: auto 1fr
+      @include shadow(2)
+      background-color: $darkBlue1
+      .header
+        background-color: $colorfulBlue
+        padding: 50px 15px
+        display: grid
+        align-items: center
+        justify-content: center
+        text-align: center
+        .username
+          font-size: 2rem
+          font-weight: 400
+          margin: 0
+          line-height: 1
+        .post
+          font-size: .9rem
+          text-transform: uppercase
+          font-weight: 100
+          margin: 0
+          margin-top: 2px
+      .menu
+        padding: 30px 15px
+        ul
+          list-style-type: none
+          padding: 0
+          width: 100%
+          margin: 0
+          li
+            a
+              text-decoration: none
+              font-size: 1.2rem
+              padding: 15px
+              color: $paleBlue
+              display: block
+              .icon
+                margin-right: 10px
+              &:hover
+                color: #fff
+            &.active
+              a
+                background-color: $darkBlue2
+      @include respond-to(lg)
+        position: fixed
+        width: 100%
+        bottom: 0
+        box-shadow: 0 3px 3px rgba(0,0,0,.16), 0 -3px 6px rgba(0,0,0,.23)
+        .header
+          display: none
+        .menu
+          padding: 0
+          ul
+            display: grid
+            grid-auto-flow: column
+            li
+              a
+                padding-left: 15px
+                padding-right: 15px
+                text-align: center
+                .icon
+                  margin-right: 0
+                span
+                  display: none
+
+
+    .l-panel-content
+      padding: 30px
+      >.wrapper
+        margin: auto
+        display: grid
+        max-width: 1200px
+        .title
+          font-size: 2rem
+          font-weight: 400
+          margin: 0
+        .panel-header
+          grid-auto-flow: column
+          padding: 15px 30px
+          justify-content: space-between
+          align-items: center
+          .buttons-wrapper
+            display: grid
+            grid-auto-flow: column
+            grid-gap: 10px
+          .run-all
+            .fa-play
+              left: 2px
+        .panel-content
+          padding: 15px 30px
+      .tourneys-wrapper
+        .l-filters
+          padding: 5px 0 20px 0
+        .panel-header
+          
+        .panel-content
+          .filters
+            padding: 15px 0
+          .tourneys-list
+            position: relative
+            display: grid
+            width: 100%
+            grid-template-columns: auto 1fr auto auto
+            grid-gap: 30px
+            align-items: center
+            .item
+              display: contents
+              &.unactive
+                .title, .date, .addedby
+                  opacity: .3
+              .icons
+                font-size: .9rem
+                letter-spacing: 2px
+                .icon-wrapper
+                  display: inline-block
+                  position: relative
+                .fas
+                  cursor: pointer
+                  transition: .25s ease
+                  &:hover
+                    color: $lightBlue
+              .title, .date, .addedby
+                font-size: 1.1rem
+      .editor-wrapper
+        .panel-block
+          .panel-header
+            
+          .panel-content
+            .form-wrapper
+              width: 100%
+              display: grid
+              justify-content: center
+              grid-template-columns: minmax(auto, 700px)
+              grid-gap: 10px 15px
+              .tourney-form
+                display: contents
+                .button
+                  justify-self: flex-start
+                  @include respond-to(sm)
+                    font-size: .9rem
+                .group
+                  align-items: flex-start
+                  display: grid
+                  grid-auto-flow: column
+                  grid-gap: 10px 15px
+                  &.jcse
+                    justify-content: flex-end
+                  @include respond-to(sm)
+                    &:not(.mobile)
+                      grid-auto-flow: row
+                .tf-field
+                  grid-template-columns: 100%
+                  &.checkbox-wrapper
+                    grid-template-columns: auto auto
+                    justify-content: center
+                    align-items: center
+                    align-self: center
+                    cursor: pointer
+                    @include respond-to(sm)
+                      justify-content: flex-start
+      .bots-wrapper
+        display: flex
+        flex-wrap: wrap
+        justify-content: flex-start
+        align-items: flex-start
+        .panel-block
+          margin-bottom: 15px
+          margin-right: 15px
+          .panel-header
+            padding: 10px 15px
+            .title
+              text-transform: uppercase
+              font-size: 1.4rem
+              font-weight: 100
+            .run-all
+              font-size: .9rem
+              height: 40px
+              width: 40px
+          .panel-content
+            padding-left: 0
+            padding-right: 0
+            display: flex
+            flex-wrap: wrap
+            align-items: center
+            .bot-sector
+              padding-right: 15px
+              padding-left: 15px
+              padding-bottom: 7.5px
+              padding-top: 7.5px
+              display: grid
+              justify-items: flex-start
+              .hint
+                font-size: .8rem
+                margin-right: 15px
+                font-weight: 100
+                color: rgba(255, 255, 255, .3)
+              .button:not(.round)
+                margin-top: 5px
+                font-size: 1.2rem
+                padding-left: 50px
+                padding-right: 50px
+              &.loading
+                justify-items: center
+                padding-left: 50px
+                padding-right: 50px
+                .loading-spinner
+                  margin-top: 5px
+                  font-size: 2rem
+                .message
+                  font-size: .8rem
+                  text-align: center
+                  font-weight: 100
+                  color: rgba(255, 255, 255, .3)
+              &.finish
+                grid-auto-flow: column
+                align-items: center
+                grid-gap: 10px
+                .notification
+                  .result
+                    font-size: 2.2rem
+                    font-weight: 600
+                    margin: 0
+                  .message
+                    font-size: 1rem
+                    text-align: center
+                    font-weight: 100
+                    color: rgba(255, 255, 255, .3)
+            
+            @include respond-to(sm)
+              justify-content: center
+              grid-template-columns: auto
+              .bot-sector
+                .hint
+                  text-align: center
+                  margin-left: 10px
+
+
+
+
+      @include respond-to(lg)
+        padding: 15px
+        padding-bottom: 75px
+        >.wrapper
+          .panel-header, .panel-content
+            padding-left: 15px
+            padding-right: 15px
+      @include respond-to(md)
+        >.wrapper
+          .panel-content
+            .tourneys-list
+              grid-template-columns: auto 1fr auto
+              .item
+                .title, .date, .addedby
+                  font-size: 1rem
+                .addedby
+                  display: none
+      @include respond-to(sm)
+        >.wrapper
+          .panel-content
+            .tourneys-list
+              grid-gap: 30px 15px
+              grid-template-columns: auto 1fr
+              .item
+                .date
+                  display: none
+                .icons
+                  display: grid
+                  grid-template-columns: auto
+                  grid-auto-flow: column
+                  letter-spacing: 0px
+                  grid-gap: 10px 5px
+
+
+
+
+

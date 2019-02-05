@@ -1,0 +1,136 @@
+// Modules
+$error: #c93030
+
+.m
+  &-field
+    display: grid
+    justify-content: flex-start
+    position: relative
+    .label
+      font-size: .9rem
+      margin: 2px 0
+      color: rgba(255,255,255,0.8)
+    .error, .info
+      font-size: 0.8rem
+      margin-left: 0px
+      padding-top: 1px
+    .error
+      color: $error
+    .info
+      color: rgba(255, 255, 255, .3)
+      cursor: text
+    .input
+      border: none
+      background-color: $darkBlue2
+      color: rgba(255, 255, 255, .9)
+      padding: 7.5px 7.5px 7.5px 7.5px
+      font-size: 1rem
+      transition: border .25s ease
+      position: relative
+      border-left: 3px solid $darkBlue2
+      &:focus
+        outline: none
+        border-color: #fff
+        color: #fff
+      &::placeholder
+        color: rgba(255, 255, 255, .2)
+      &.error
+        border-color: $error
+      &.success
+        border-color: $colorfulBlue
+      &-text 
+        
+      &-checkbox
+        margin-left: 10px
+        cursor: pointer
+
+      &-textarea
+        font-family: 'Source Sans Pro'
+        resize: vertical
+        min-height: 50px
+        height: 100px
+      &-select
+        position: relative
+        cursor: pointer
+        font-size: inherit
+        padding-right: 30px
+        width: 100%
+        background-color: $darkBlue2
+        padding-top: 6.5px
+        padding-bottom: 6.5px
+        &:after
+          position: absolute
+          content: "hello"
+          display: block
+          background-color: #fff
+          font-family: "Font Awesome 5 Free"
+    .select-arrow
+      position: absolute
+      right: 10px
+      bottom: 9px
+      pointer-events: none          
+
+  &-universal-block
+    @include shadow(2)
+    .ub-dark-top
+      @include shadow(1)
+      background: $darkBlue2
+      display: grid
+      padding: 15px 10px
+      font-size: 1.2rem
+      font-weight: 100
+      z-index: 1
+      position: relative
+    .ub-content
+      background: $darkBlue1
+      display: grid
+      padding: 15px 10px
+      font-size: 1rem
+      font-weight: 400
+    &.light
+      @include shadow(1)
+      .ub-dark-top
+        background-color: $darkBlue3
+        padding: 10px
+      
+
+  &-solid-block
+    @include shadow(1)
+    background-color: $darkBlue1
+    padding: 5px 10px
+    font-size: 1.1rem
+    font-weight: 400
+    text-transform: initial
+    @include respond-to(md)
+      font-size: 1rem
+    &.abs
+      display: none
+      position: absolute
+      z-index: 6
+      background-color: rgba(39, 56, 81, .9)
+      font-size: .9rem
+      left: 90%
+      bottom: 90%
+      // background: linear-gradient(-45deg, rgba(56, 171, 131, .9), rgba(48, 109, 161, .9))
+      background-color: rgba(39, 88, 132, .9)
+      white-space: nowrap
+      border-radius: 5px
+      letter-spacing: 0px
+      pointer-events: none
+      padding: 7.5px 12.5px
+      p
+        margin: 0
+        font-size: inherit
+      &.w1
+        width: 200px
+      &.left
+        left: unset
+        right: 90%
+      &.bottom
+        bottom: unset
+        top: 90%
+      
+
+  
+
+  

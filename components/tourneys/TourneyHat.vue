@@ -1,47 +1,124 @@
 <template>
   <div class="l-row hat bg">
     <div class="short-info">
-      <h1 class="title">Weplay CS:GO Cup (1x1 pistols) #148</h1>
+      <h1 class="title">{{ tourney.title }}</h1>
       <div class="attributes">
-        <div class="item">Best of 3</div>
-        <div class="item">Бесплатно</div>
-        <div class="item">SQUAD FPP</div>
+        <div class="item" v-if="tourney.teamMode">{{ tourney.matchMode }}</div>
+        <div class="item" v-if="tourney.teamMode">{{ tourney.teamMode }}</div>
+        <div class="item">{{ (!tourney.price) ? ('Бесплатно') : (tourney.price + ' с игрока') }}</div>
       </div>
       <div class="price-and-reg">
-        <div class="price">
-          <span class="num">200$</span>
+        <div class="price" v-if="tourney.prize">
+          <span class="num">{{ tourney.prize }}</span>
           <span class="label">Призовой фонд</span>
         </div>
-        <button-element>Участвовать</button-element>
+        <a v-if="tourney.link" target="_blank" :href="tourney.link" class="button">
+          <span>Участвовать</span>
+        </a>
       </div>
     </div>
-    <div class="timer">
+    <div class="timer" v-if="!timer.stop">
       <div class="item">
-        <div class="num">20</div>
-        <div class="label">Дня</div>
+        <div class="num">{{ timer.days }}</div>
+        <div class="label">Days</div>
       </div>
       <div class="item">
-        <div class="num">12</div>
-        <div class="label">Часов</div>
+        <div class="num">{{ timer.hours }}</div>
+        <div class="label">Hours</div>
       </div>
       <div class="item">
-        <div class="num">35</div>
-        <div class="label">Минут</div>
+        <div class="num">{{ timer.minutes }}</div>
+        <div class="label">Minutes</div>
       </div>
       <div class="item">
-        <div class="num">4</div>
-        <div class="label">Секунд</div>
+        <div class="num">{{ timer.seconds }}</div>
+        <div class="label">Seconds</div>
+      </div>
+    </div>
+    <div class="timer" v-else>
+      <div class="item">
+        <div class="num small">Турнир начался</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ButtonElement from '@/components/elements/ButtonElement'
-
 export default {
-  components: {
-    ButtonElement
+  props: {
+    tourney: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      timer: {
+        days: '00',
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
+        stop: false
+      }
+    }
+  },
+  watch: {
+    tourney() {
+      console.log('watch')
+      this.timerFunc()
+    }
+  },
+  mounted() {
+    console.log('mounted')
+    console.log(this.tourney.date)
+
+    this.timerFunc()
+  },
+  destroyed() {
+    this.timer.stop = true
+  },
+  methods: {
+    timerFunc() {
+      if (!this.tourney.date) return
+      this.timer.stop = false
+
+      let diff = (new Date(this.tourney.date) - new Date()) / 1000
+
+      if (diff < 0) return (this.timer.stop = true)
+      let refreshTimer = setInterval(() => {
+        diff -= 1
+        if (diff < 0 || this.timer.stop) {
+          this.timer.stop = true
+          clearInterval(refreshTimer)
+          return
+        }
+        console.log('tick')
+        // console.log(diff / 1000 / 60 / 60)
+        //days left
+        this.timer.days = Math.floor(diff / 60 / 60 / 24)
+        //hours left
+        this.timer.hours = Math.floor(diff / 60 / 60) - 24 * this.timer.days
+        this.timer.minutes =
+          Math.floor(diff / 60) - 60 * (24 * this.timer.days + this.timer.hours) //minutes left
+        this.timer.seconds =
+          Math.floor(diff) -
+          60 *
+            (this.timer.minutes +
+              60 * (24 * this.timer.days + this.timer.hours)) //days left
+
+        this.timer.hours =
+          this.timer.hours < 10 ? `0${this.timer.hours}` : this.timer.hours
+        this.timer.minutes =
+          this.timer.minutes < 10
+            ? `0${this.timer.minutes}`
+            : this.timer.minutes
+        this.timer.seconds =
+          this.timer.seconds < 10
+            ? `0${this.timer.seconds}`
+            : this.timer.seconds
+        // console.log(days, hours, minutes, seconds)
+      }, 1000)
+    }
   }
 }
 </script>
@@ -89,6 +166,7 @@ export default {
       grid-auto-flow: column
       justify-content: space-around
       margin-top: 5px  
+      grid-gap: 15px
       .item
         font-size: 1.1rem
         text-transform: uppercase
@@ -98,6 +176,7 @@ export default {
       grid-auto-flow: column
       align-items: center
       justify-content: space-around
+      grid-gap: 30px
       .price
         font-size: 3rem
         font-weight: 400
@@ -145,6 +224,8 @@ export default {
         font-size: 5rem
         font-weight: 100
         line-height: .9
+        &.small
+          font-size: 3rem
       .label
         font-size: .9rem
         line-height: 1

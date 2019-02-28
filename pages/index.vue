@@ -1,8 +1,12 @@
-<template></template>
+<template>
+  <div>Главная</div>
+</template>
 
 <script>
 export default {
-  components: {}
+  components: {},
+  created() {
+  }
 }
 </script>
 

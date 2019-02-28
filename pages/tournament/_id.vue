@@ -1,28 +1,71 @@
 <template>
   <div class="l-tourney page">
     <div class="container bg">
-      <tourney-hat/>
+      <tourney-hat :tourney="tourney"/>
     </div>
     <div class="container">
       <div class="l-content content">
-        <tourney-columns/>
-        <recommended-section/>
+        <tourney-columns :tourney="tourney"/>
+        <!-- MAKE LIST FOR DAT -->
+        <recommended-section :list="tourneysList"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import TourneyHat from '@/components/tourneys/TourneyHat'
 import TourneyColumns from '@/components/tourneys/TourneyColumns'
 import RecommendedSection from '@/components/tourneys/RecommendedSection'
+import _ from 'lodash'
 
 export default {
+  computed: {
+    ...mapState({
+      tourney: 'fullTournament'
+    })
+  },
+  data() {
+    return {
+      tourneysList: {
+        this: [],
+        other: []
+      }
+    }
+  },
+  async created() {
+    let { data: thatList } = await this.$axios
+      .post('/api/tourneys/list', {
+        game: this.tourney.game,
+        params: {
+          organisator: this.tourney.organisator
+        }
+      })
+      .catch(err => console.log(err))
+
+    this.tourneysList.this = thatList
+
+    let { data: otherList } = await this.$axios
+      .post('/api/tourneys/list', {
+        game: this.tourney.game,
+        params: {
+          organisator: {
+            title: this.tourney.organisator,
+            not: true
+          }
+        }
+      })
+      .catch(err => console.log(err))
+
+    this.tourneysList.other = otherList
+  },
   components: {
     TourneyHat,
     TourneyColumns,
     RecommendedSection
-  }
+  },
+  middleware: 'tournament'
 }
 </script>
 

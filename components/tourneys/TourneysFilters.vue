@@ -2,17 +2,26 @@
   <div class="l-filters">
     <div class="container">
       <div class="l-content wrapper">
-        <div class="m-solid-block filter-button caped">1v1</div>
-        <div class="m-solid-block filter-button unactive caped">5v5</div>
-        <div class="m-solid-block filter-button calendar caped">
-          <i class="fas fa-calendar"></i> 23/12
-        </div>
-        <div class="m-solid-block filter-button unactive caped">Бесплатно</div>
-        <div class="m-solid-block filter-button select caped no-padding">
-          <select>
+        <div
+          class="m-solid-block filter-button caped"
+          v-for="(param, index) in paramsTemplate"
+          @click="toggleField(index)"
+          :class="{ disabled: !params[index] }"
+          :key="index"
+        >{{ param.text }}</div>
+        <div
+          class="m-solid-block filter-button caped"
+          @click="toggleField('free')"
+          :class="{ disabled: !params.free }"
+        >Бесплатно</div>
+        <div
+          class="m-solid-block filter-button select caped no-padding"
+          :class="{ disabled: !params.organisator }"
+        >
+          <select v-model="params.organisator">
             <!-- maybe should take from m-field -->
-            <option selected>Организаторы</option>
-            <option>Epulze</option>
+            <option selected value>Организатор</option>
+            <option value="Epulze">Epulze</option>
           </select>
           <i class="fas fa-angle-down"></i>
         </div>
@@ -21,7 +30,46 @@
   </div>
 </template>
 <script>
-export default {}
+export default {
+  props: {
+    paramsTemplate: {
+      type: Object,
+      required: false
+    }
+  },
+  data() {
+    return {
+      params: {
+        free: false,
+        organisator: '',
+        // optional:
+        v1: false,
+        v5: false,
+        fpp: false,
+        tpp: false,
+        solo: false,
+        duo: false,
+        squad: false
+      }
+    }
+  },
+  created() {
+    console.log(this.paramsTemplate)
+  },
+  watch: {
+    params: {
+      handler: function(val) {
+        this.$emit('updateParams', val)
+      },
+      deep: true
+    }
+  },
+  methods: {
+    toggleField(option) {
+      this.params[option] = !this.params[option]
+    }
+  }
+}
 </script>
 
 <style lang="sass" scoped>
@@ -34,13 +82,14 @@ export default {}
     flex-wrap: wrap
     justify-content: flex-start
     align-items: center
-    grid-gap: 10px 
     .filter-button
       margin: 0 10px 5px 0
       cursor: pointer
       @include shadow(1)
       @include respond-to(md)
         margin: 0 7.5px 10px 0
+      &.disabled
+        opacity: .3
       &.calendar
         .fas
           margin-right: 5px

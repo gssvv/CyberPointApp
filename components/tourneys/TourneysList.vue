@@ -2,17 +2,10 @@
   <div class="l-tourneys-list">
     <div class="container">
       <div class="l-content wrapper">
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-      </div>
-      <div class="l-content">
-        <div class="loading-tourneys">
-          <i class="fas fa-circle-notch fa-spin"></i>
+        <tourney-block v-for="tourney in tourneysArray" :key="tourney.id" :tourney="tourney"/>
+        <div class="message" v-if="!tourneysArray.length && !$parent.loading">
+          Ничего не найдено
+          <i class="fas fa-frown-open"></i>
         </div>
       </div>
     </div>
@@ -21,9 +14,22 @@
 
 <script>
 import TourneyBlock from './TourneyBlock'
+import { setTimeout } from 'timers'
+
 export default {
+  props: {
+    tourneysArray: {
+      type: Array,
+      required: true
+    }
+  },
   components: {
     TourneyBlock
+  },
+  created() {
+    this.$on('goToTourney', id => {
+      this.$parent.$emit('goToTourney', id)
+    })
   }
 }
 </script>
@@ -49,5 +55,20 @@ export default {
       align-items: center
       font-size: 3rem
       padding: 45px 0 30px 0
+    .message
+      color: $paleBlue
+      opacity: .5
+      margin: auto
+      font-size: 1.2rem
+      font-weight: 100
+      grid-area: 1 / 1 / 2 / 4
+      padding: 30px 0
+      .fas
+        display: block
+        margin: auto
+        text-align: center
+        font-size: 2.4rem
+        margin: 10px 0
+
 
 </style>

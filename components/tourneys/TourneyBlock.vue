@@ -2,29 +2,27 @@
   <div class="m-tourney-item m-universal-block">
     <div class="tourney-header ub-dark-top">
       <div class="logo">
-        <img src="/tourneys-page/tourney-logo.png" alt>
+        <img :src="`/organisators/${tourney.organisator.toLowerCase()}.png`" alt>
       </div>
       <div class="short-info">
-        <p class="t-mode">Best of 3</p>
-        <h4 class="game">Dota 2</h4>
-        <p class="g-mode">5v5</p>
+        <p class="t-mode">{{ tourney.teamMode }}</p>
+        <h4 class="game">{{ tourney.game }}</h4>
+        <p class="g-mode">{{ tourney.matchMode }}</p>
         <p class="players">
-          <i class="fas fa-user"></i>
-          <i class="fas fa-user"></i>
-          <i class="fas fa-user"></i>
-          <i class="fas fa-user"></i>
-          <i class="fas fa-user"></i>
+          <i class="fas fa-user" v-for="i in tourney.members" :key="i"></i>
         </p>
-        <p class="date">Сегодня в 20:00</p>
+        <p class="date">{{ getCalendar(tourney.date) }}</p>
       </div>
     </div>
     <div class="tourney-content ub-content">
-      <h3 class="title">Chicken Breakfast for 1</h3>
-      <p class="charge">Бесплатное участие</p>
+      <h3 class="title">{{ tourney.title }}</h3>
+      <p
+        class="charge"
+      >{{ (!tourney.price) ? ('Бесплатное участие') : (tourney.price + ' от игрока') }}</p>
 
       <div class="low-row">
-        <p class="reward">200$</p>
-        <a href class="button">
+        <p class="reward">{{ tourney.prize }}</p>
+        <a @click="goToTourney(tourney.id)" class="button">
           <span>Подробнее</span>
         </a>
       </div>
@@ -33,7 +31,37 @@
 </template>
 
 <script>
-export default {}
+import moment from 'moment'
+import 'moment/locale/ru'
+
+export default {
+  props: {
+    tourney: {
+      type: Object,
+      required: true
+    },
+    link: {
+      type: Boolean,
+      required: false
+    }
+  },
+  created() {
+    moment.locale('ru')
+  },
+  mounted() {},
+  methods: {
+    getCalendar(date) {
+      return moment(date).calendar()
+    },
+    goToTourney(id) {
+      if (this.link) {
+        return this.$router.push({ path: `/tournament/${this.tourney.id}` })
+      }
+      this.$parent.$emit('goToTourney', id)
+      this.$store.dispatch('setFullTournament', id)
+    }
+  }
+}
 </script>
 
 <style lang="sass" scoped>
@@ -41,6 +69,7 @@ export default {}
 
 .m-tourney-item
   position: relative
+  display: grid
   .tourney-header
     position: relative
     display: grid
@@ -78,6 +107,7 @@ export default {}
       .players
         font-size: .9rem
         margin-top: 5px
+        letter-spacing: 2px
       .date
         font-size: 1.2rem
         margin-top: 5px
@@ -99,7 +129,7 @@ export default {}
       font-weight: 100
       color: $paleBlue
     .reward
-      margin-top: 5px
+      margin-top: 10px
       font-weight: 400
       font-size: 2.2rem
       margin-bottom: 0

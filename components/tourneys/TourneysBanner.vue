@@ -10,6 +10,7 @@
         <h1>
           <strong>Любительские турниры по {{ gameInfo.title }} для начинающих игроков и команд</strong>
         </h1>
+        <strong class="description-hidden">{{ gameInfo.description }}</strong>
       </div>
     </div>
   </div>
@@ -27,6 +28,18 @@ export default {
       bannerStyle: {
         backgroundImage: `url(/tourneys-page/${this.gameInfo.link}-banner.jpg)`
       }
+    }
+  },
+  head() {
+    return {
+      title: 'Любительские турниры по ',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.gameInfo.description
+        }
+      ]
     }
   }
 }
@@ -51,6 +64,12 @@ export default {
     opacity: .65
   .container
     z-index: 1
+    .description-hidden
+      font-size: 1px
+      margin: 0
+      padding: 0
+      opacity: .01
+      pointer-events: none
     .wrapper
       padding: 50px 0
       color: #fff

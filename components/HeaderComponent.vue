@@ -30,7 +30,7 @@
                     <nuxt-link
                       v-for="game in gamesMenu"
                       :key="game.link"
-                      :to="game.link"
+                      :to="'/'+game.link"
                       :class="game.link"
                     >{{ game.shortTitle || game.title }}</nuxt-link>
                   </div>
@@ -55,7 +55,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { TweenMax } from 'gsap'
-import { loadavg } from 'os'
 
 export default {
   data() {
@@ -63,7 +62,9 @@ export default {
       showedMenu: false
     }
   },
-  created() {},
+  created() {
+    console.log(this.currentGameInfo)
+  },
   mounted() {},
   computed: {
     ...mapGetters({
@@ -177,6 +178,9 @@ export default {
               white-space: nowrap
               cursor: default
               transition: 0s
+              background-color: $darkBlue3
+              &:hover
+                background-color: $darkBlue1
               &.dota
                 background-image: url(../static/common/game-button-bg/dota.png)
                 background-color: $dotaPrimary

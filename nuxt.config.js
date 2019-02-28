@@ -1,6 +1,5 @@
 const pkg = require('./package')
 
-
 module.exports = {
   mode: 'universal',
 
@@ -9,24 +8,27 @@ module.exports = {
    */
   head: {
     title: pkg.name,
-    meta: [{
+    meta: [
+      {
         charset: 'utf-8'
       },
       {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1'
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content: pkg.description
       }
     ],
-    link: [{
-      rel: 'icon',
-      type: 'image/x-icon',
-      href: '/favicon.ico'
-    }]
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico'
+      }
+    ]
+  },
+
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    jwtPrivateKey: process.env.JWT_PRIVATE_KEY || 'jwtKey'
   },
 
   /*
@@ -39,16 +41,15 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: [
-    '@/assets/style/main.sass',
-    '@/assets/style/fa.all.min.css'
-  ],
+  css: ['@/assets/style/main.sass', '@/assets/style/fa.all.min.css'],
 
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '@/plugins/click-outside.js'
+    '@/plugins/click-outside.js',
+    '@/plugins/v-tooltip.js',
+    '@/plugins/scroll.js'
   ],
 
   /*
@@ -73,8 +74,6 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {
-
-    }
+    extend(config, ctx) {}
   }
 }

@@ -1,35 +1,35 @@
 <template>
   <div class="recommended">
-    <div class="m-universal-block section light">
+    <div class="m-universal-block section light" v-if="list.this[0]">
       <div class="ub-dark-top block-header">
         <a>
           Еще турниры
-          <span class="unactive">от ChallangerMode</span>
+          <span class="unactive">от {{ list.this[0].organisator }}</span>
         </a>
       </div>
 
       <div class="ub-content block-content">
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
+        <tourney-block
+          v-for="tourney in list.this"
+          :key="tourney.id"
+          :tourney="tourney"
+          :link="true"
+        />
       </div>
     </div>
 
-    <div class="m-universal-block section light">
+    <div class="m-universal-block section light" v-if="list.other[0]">
       <div class="ub-dark-top block-header">
         <a>Прочие</a>
       </div>
 
       <div class="ub-content block-content">
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
-        <tourney-block/>
+        <tourney-block
+          v-for="tourney in list.other"
+          :key="tourney.id"
+          :tourney="tourney"
+          :link="true"
+        />
       </div>
     </div>
   </div>
@@ -38,6 +38,12 @@
 <script>
 import TourneyBlock from './TourneyBlock'
 export default {
+  props: {
+    list: {
+      type: Object,
+      required: true
+    }
+  },
   components: {
     TourneyBlock
   }

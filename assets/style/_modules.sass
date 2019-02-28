@@ -1,6 +1,16 @@
 // Modules
 $error: #c93030
 
+.tooltip 
+  z-index: 10
+  &-inner
+    background: $darkBlue3
+    color: #fff
+    padding: 2px 5px
+    overflow: auto
+    border-radius: 2px
+    font-size: .9rem
+
 .m
   &-field
     display: grid
@@ -90,9 +100,7 @@ $error: #c93030
     &.light
       @include shadow(1)
       .ub-dark-top
-        background-color: $darkBlue3
         padding: 10px
-      
 
   &-solid-block
     @include shadow(1)

@@ -3,48 +3,47 @@
     <div class="column wide">
       <div class="m-universal-block light item">
         <div class="ub-dark-top block-header">Дополнительно:</div>
-        <div class="ub-content block-content">
-          <p>
-            <b>Правила:</b>
-          </p>
-
-          <ul>
-            <li>Нельзя намеренно использовать баги игры</li>
-            <li>Использование читов наказывается баном</li>
-            <li>Игрокам необходимо записывать реплеи игры и хранить их в течение 7 дней</li>
-            <li>Игрокам необходимо сделать скриншот "экрана завершения игры" в случае краша игры на во время турнира</li>
-            <li>Игроки с оскорбительными никнеймами будут дисквалифицированы.</li>
-          </ul>
-        </div>
+        <div class="ub-content block-content" v-html="tourney.block1"></div>
       </div>
     </div>
 
     <div class="column">
       <div class="m-universal-block light item">
         <div class="ub-dark-top block-header">Призовой фонд:</div>
-        <div class="ub-content block-content">
-          <p>1. 120$
-            <br>2. 50$
-            <br>3. 30$
+        <div class="ub-content block-content" v-html="tourney.block2"></div>
+      </div>
+
+      <div class="m-universal-block light item">
+        <div class="ub-dark-top block-header organisator-header">
+          <img
+            v-if="tourney.organisator"
+            :src="`/organisators/${tourney.organisator.toLowerCase()}.png`"
+            alt
+          >
+        </div>
+        <div class="ub-content block-content organisator-content">
+          <h2>{{ tourney.organisator }}</h2>
+          <p>
+            <a :href="tourney.link">Перейти на сайт организатора</a>
           </p>
         </div>
       </div>
     </div>
 
     <div class="column">
-      <div class="m-universal-block light item">
-        <div class="ub-dark-top block-header organisator-header">
-          <img src="/tourneys-page/tourney-logo.png" alt>
-        </div>
-        <div class="ub-content block-content organisator-content">
-          <h2>ChallangerMode</h2>
-          <p>
-            <a href="#">Перейти на сайт организатора</a>
-          </p>
-        </div>
-      </div>
+      <script type="text/javascript" src="https://vk.com/js/api/openapi.js?160"></script>
+      <!-- VK Widget -->
+      <div id="vk_groups"></div>
+      <script type="text/javascript">
+        VK.Widgets.Group(
+          'vk_groups',
+          { mode: 3, no_cover: 1, color1: '1E2B40', color2: 'FFFFFF', width: 'auto' },
+          151813510
+        )
+      </script>
 
-      <div class="m-universal-block light item">
+      <!-- APPLICATIONS -->
+      <!-- <div class="m-universal-block light item">
         <div class="ub-dark-top block-header players-header">
           <a>
             Поиск тиммейтов
@@ -87,20 +86,36 @@
             <div class="rating">3200MMR</div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    tourney: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {}
+  },
+  computed: {},
+  created() {},
+  mounted() {}
+}
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import '@/assets/style/_variables.sass'
+#vk_groups
+  @include shadow(1)
 
 .column
   display: grid
+  grid-gap: 20px
   @include respond-to(lg)
     &.wide
       grid-column: 1/3
@@ -115,10 +130,10 @@ export default {}
     .block-content
       padding: 10px
       display: block
-    b
-      font-weight: 600
-    ul
-      padding-left: 20px
+      b
+        font-weight: 600
+      ol, ul
+        padding-left: 20px
     .organisator-header
       padding: 15px 10px
       justify-content: center

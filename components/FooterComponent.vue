@@ -1,7 +1,7 @@
 <template>
   <div class="l-footer">
     <div class="container">
-      <div class="l-content wrapper">I will fix this I promise
+      <div class="l-content wrapper">All rights reserved © 2019
         <!-- Add something -->
       </div>
     </div>
@@ -18,4 +18,6 @@ export default {}
 .l-footer
   background-color: $darkBlue1
   padding: 30px 0
+  .wrapper
+    text-align: center
 </style>

@@ -366,6 +366,8 @@ router.post('/set-status', auth, async (req, res) => {
   let user = await res.locals.user
   // if only particular author or bot
   let addedby = req.body.addedby || { $ne: '' }
+  let organisator = req.body.organisator || { $ne: '' }
+  let game = req.body.game || { $ne: '' }
   let status = req.body.status === undefined ? 1 : req.body.status
 
   if (user.privilege !== 'admin' && user.privilege !== 'moderator')
@@ -373,7 +375,7 @@ router.post('/set-status', auth, async (req, res) => {
 
   // get and set ID
   let tourney = await Tourney.updateMany(
-    { status: !status, addedby },
+    { status: !status, addedby, game, organisator },
     {
       status: status
     }

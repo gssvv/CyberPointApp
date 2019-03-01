@@ -17,6 +17,8 @@ router.get('/all', auth, async (req, res) => {
 
   if (!bots) return res.status(400).send('Bots are not found.')
 
+  await Bot.updateMany({ active: true }, { lastUpdate: new Date() })
+
   let botFunction = []
   let result = []
 
@@ -30,7 +32,7 @@ router.get('/all', auth, async (req, res) => {
   res.send(result)
 })
 
-router.get('/:bot', auth, async (req, res) => {
+router.get('/list', auth, async (req, res) => {
   if (
     res.locals.user.privilege !== 'admin' &&
     res.locals.user.privilege !== 'moderator'
@@ -39,7 +41,26 @@ router.get('/:bot', auth, async (req, res) => {
 
   let game = req.body.game || null
 
-  let bot = await Bot.findOne({ active: true, id: req.params.bot })
+  let bots = await Bot.find({ active: true }).catch(err =>
+    res.status(400).send('Error occured')
+  )
+
+  if (!res.headersSent) res.send(bots)
+})
+
+router.post('/:bot', auth, async (req, res) => {
+  if (
+    res.locals.user.privilege !== 'admin' &&
+    res.locals.user.privilege !== 'moderator'
+  )
+    return res.status(400).send('Access denied.')
+
+  let game = req.body.game || null
+
+  let bot = await Bot.findOneAndUpdate(
+    { active: true, id: req.params.bot },
+    { lastUpdate: new Date() }
+  )
 
   if (!bot) return res.status(400).send('Bot is not found.')
 
@@ -48,8 +69,9 @@ router.get('/:bot', auth, async (req, res) => {
 
   let botFunction = require(`../bots/${bot.id}`)
   let result = await botFunction({ game })
+  // must save to database and return how many added
 
-  res.send(result)
+  res.send(String(result.length))
 })
 
 module.exports = router

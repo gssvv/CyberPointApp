@@ -54,7 +54,13 @@ router.get('/list', auth, async (req, res) => {
     return res.status(400).send('Access denied.')
 
   let list = await User.find({ privilege: { $ne: 'admin' } })
-    .select({ _id: 1, username: 1 })
+    .select({
+      _id: 1,
+      username: 1,
+      email: 1,
+      active: 1,
+      privilege: 1
+    })
     .catch(err => res.status(400).send(err))
 
   if (!list) return res.status(400)
@@ -92,12 +98,33 @@ router.post('/register', auth, async (req, res) => {
   res.status(200).send('User has been successfully registered.')
 })
 
+router.post('/delete', auth, async (req, res) => {
+  if (res.locals.user.privilege !== 'admin')
+    return res.status(400).send('Access denied.')
+
+  if (!req.body.username)
+    return res.status(400).send('Username was not provided')
+
+  let query = await User.findOneAndDelete({
+    username: req.body.username,
+    privilege: { $ne: 'admin' }
+  }).catch(err => res.status(400).send(err))
+
+  if (res.headerSent) return
+  if (!query) res.status(400).send('User is not found.')
+  console.log(res.headerSent)
+
+  res.status(400).send('User successfully deleted.')
+})
+
 router.post('/edit', auth, async (req, res) => {
   if (res.locals.user.privilege !== 'admin')
     return res.status(400).send('Access denied.')
 
   if (!req.body.username)
     return res.status(400).send('Username was not provided')
+
+  if (req.body.password == '') delete req.body.password
 
   let newUser = _.pick(req.body, [
     'username',
@@ -113,15 +140,10 @@ router.post('/edit', auth, async (req, res) => {
   if (user.privilege == 'admin')
     return res.status(400).send('Unable to edit users with admin status.')
 
+  if (newUser.password)
+    newUser.password = await bcrypt.hash(newUser.password, 10)
+
   newUser = Object.assign(user, newUser)
-  // clean for validation
-  delete newUser._id
-  delete newUser.__v
-
-  const { error } = validateFull(newUser)
-  if (error) return res.status(404).send(error.details[0].message)
-
-  newUser.password = await bcrypt.hash(newUser.password, 10)
 
   let result = await User.updateOne(
     { username: newUser.username },

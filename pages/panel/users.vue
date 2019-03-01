@@ -34,11 +34,11 @@
           :title="confForm.passwordAgain.title"
         />
         <field-select
-          v-model="confForm.status.val"
-          :error="confForm.status.err"
-          :success="confForm.status.suc"
-          :title="confForm.status.title"
-          :options="confForm.status.options"
+          v-model="confForm.active.val"
+          :error="confForm.active.err"
+          :success="confForm.active.suc"
+          :title="confForm.active.title"
+          :options="confForm.active.options"
         />
         <field-select
           v-model="confForm.privilege.val"
@@ -130,6 +130,7 @@ export default {
         button: '',
         active: false
       },
+      usersList: [],
       addFormMsg: '',
       confFormMsg: '',
       addForm: {
@@ -210,12 +211,8 @@ export default {
           err: '',
           options: [
             {
-              title: 'Gusev',
-              val: 'Gusev'
-            },
-            {
-              title: 'Epulze',
-              val: 'Epulze'
+              title: '',
+              val: ''
             }
           ],
           schema: Joi.string().required()
@@ -274,7 +271,7 @@ export default {
           ],
           schema: Joi.required()
         },
-        status: {
+        active: {
           title: 'Status',
           val: '',
           suc: false,
@@ -282,11 +279,11 @@ export default {
           options: [
             {
               title: 'Active',
-              val: 1
+              val: true
             },
             {
               title: 'Unactive',
-              val: 0
+              val: false
             }
           ],
           schema: Joi.required()
@@ -294,20 +291,28 @@ export default {
       }
     }
   },
-  created() {},
+  created() {
+    this.$axios
+      .get('/api/users/list')
+      .then(res => {
+        this.usersList = res.data
+        for (let user of this.usersList) {
+          this.confForm.username.options.push({
+            val: user.username,
+            title: user.username
+          })
+        }
+      })
+      .catch(err => console.log('Error occured'))
+  },
   mounted() {},
   watch: {
-    'confForm.username.val'() {
-      // this.$axios('/api/get-user-info', {params})
-      let user = {
-        id: 123,
-        username: 'Gusev',
-        email: 'san4es021@gmail.com',
-        privilege: 'admin',
-        status: 0
-      }
+    'confForm.username.val'(newVal) {
+      let user = this.usersList.find(e => e.username == newVal)
+
       _.mapKeys(this.confForm, function(value, key) {
-        if (key !== 'password' && key !== 'passwordAgain') value.val = user[key]
+        if (key == 'password' || key == 'passwordAgain') return
+        value.val = user[key]
       })
     },
     'confForm.email.val'() {
@@ -316,8 +321,8 @@ export default {
     'confForm.privilege.val'() {
       this.validate('privilege', 'confForm')
     },
-    'confForm.status.val'() {
-      this.validate('status', 'confForm')
+    'confForm.active.val'() {
+      this.validate('active', 'confForm')
     },
     'confForm.password.val'() {
       this.validate('password', 'confForm', true)
@@ -359,7 +364,6 @@ export default {
           this[form].passwordAgain.err = 'Passwords are different!'
           this[form].password.suc = false
           this[form].passwordAgain.suc = false
-          console.log(22)
 
           return false
         }
@@ -375,9 +379,10 @@ export default {
         field.suc = true
       }
     },
-    getUserObject() {
+    getUserObject(params = {}) {
+      let form = params.edit ? this.confForm : this.addForm
       let user = {}
-      _.mapKeys(this.addForm, function(value, key) {
+      _.mapKeys(form, function(value, key) {
         user[key] = value.val
       })
       return user
@@ -388,7 +393,6 @@ export default {
       for (let item in this[form]) {
         if (!this[form][item].suc) {
           error = true
-          console.log(item)
         }
       }
       if (error) return false
@@ -398,19 +402,22 @@ export default {
     removeUser() {
       // CHECK IF USER SET
       if (!this.confForm.id.val) {
-        return (this.confFormMsg = 'Choose the user')
+        return (this.confFormMsg = 'User is not selected')
       } else {
         this.confFormMsg = ''
       }
 
       // POPUP
       this.confirmPopup(() => {
-        console.log('removed user')
         // QUERY
-        // this.$axios.post('/api/removeuser', {params})
-        this.popup.title = 'User has been removed.'
-        this.popup.message = 'Accound to longer exists.'
-        this.popup.button = ''
+        this.$axios
+          .post('/api/users/remove', { username: this.confForm.username.val })
+          .then(res => {
+            this.popup.title = 'User has been removed.'
+            this.popup.message = 'Accound to longer exists.'
+            this.popup.button = ''
+          })
+          .catch(err => console.log(err))
       }, 'You are going to remove user ' + this.confForm.username.val)
     },
     addUser() {
@@ -439,7 +446,7 @@ export default {
     },
     configureUser() {
       // CHECK IF USER SET
-      if (!this.confForm.id.val) {
+      if (!this.confForm.username.val) {
         return (this.confFormMsg = 'Choose the user')
       } else {
         this.confFormMsg = ''
@@ -451,12 +458,16 @@ export default {
 
       // POPUP
       this.confirmPopup(() => {
-        console.log('edited user')
+        let user = this.getUserObject({ edit: true })
         // QUERY
-        // this.$axios.post('/api/configureuser', {params})
-        this.popup.title = 'User successfully edited!'
-        this.popup.message = 'Notification was sent to email.'
-        this.popup.button = ''
+        this.$axios
+          .post('/api/users/edit', user)
+          .then(res => {
+            this.popup.title = 'User successfully edited!'
+            this.popup.message = ''
+            this.popup.button = ''
+          })
+          .catch(err => console.log('Error occured'))
       }, 'You are going to edit user "' + this.confForm.username.val + '" with privileges of ' + this.confForm.privilege.val)
     },
 

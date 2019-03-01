@@ -6,14 +6,17 @@
       :key="blockIndex"
     >
       <div class="ub-dark-top panel-header">
-        <h2 class="title">{{ block.title }}</h2>
+        <div>
+          <h2 class="title">{{ block.organisator }}</h2>
+          <span class="hint">Updated: {{ dateFromNow(block.lastUpdate) }}</span>
+        </div>
 
         <div class="buttons-wrapper">
-          <common-button :round="true" @click.native.stop="stopAll(block.id, block.title)">
+          <common-button :round="true" @click.native.stop="stopAll(block.organisator)">
             <i class="fas fa-pause"></i>
           </common-button>
 
-          <common-button :round="true" @click.native.stop="runAll(block.id, block.title)">
+          <common-button :round="true" @click.native.stop="runAll(block.organisator)">
             <i class="fas fa-play"></i>
           </common-button>
         </div>
@@ -27,13 +30,9 @@
           finish: bot.result.status === -1 || bot.result.status === 1 }"
           :key="botIndex"
         >
-          <span
-            class="hint"
-            v-if="bot.result.status === undefined"
-          >Last update: {{ bot.lastUpdate }}</span>
           <common-button
             v-if="bot.result.status === undefined"
-            @click.native="launchBot(blockIndex, botIndex, bot.id)"
+            @click.native="launchBot(block.id, bot.game, blockIndex, botIndex)"
           >{{ bot.game }}</common-button>
 
           <!-- LOADING -->
@@ -46,12 +45,12 @@
           <common-button
             :round="true"
             v-if="bot.result.status === 1"
-            @click.native.stop="runAll(block.id, block.title)"
+            @click.native.stop="runAll(block.organisator, bot.game)"
           >
             <i class="fas fa-play"></i>
           </common-button>
           <div class="notification" v-if="bot.result.status === 1">
-            <h3 class="result">Готово!</h3>
+            <h3 class="result">Success</h3>
             <span class="message">{{ bot.result.message }}</span>
           </div>
 
@@ -59,12 +58,12 @@
           <common-button
             :round="true"
             v-if="bot.result.status === -1"
-            @click.native="launchBot(blockIndex, botIndex, bot.id)"
+            @click.native="launchBot(block.id, bot.game, blockIndex, botIndex)"
           >
             <i class="fas fa-redo"></i>
           </common-button>
           <div class="notification" v-if="bot.result.status === -1">
-            <h3 class="result">Ошибка</h3>
+            <h3 class="result">Error</h3>
             <span class="message">{{ bot.result.message }}</span>
           </div>
         </div>
@@ -83,6 +82,7 @@
 import CommonButton from '@/components/elements/CommonButton.vue'
 import SimplePopup from '@/components/elements/SimplePopup.vue'
 import Joi from 'joi'
+import moment from 'moment'
 
 export default {
   layout: 'panel',
@@ -95,124 +95,91 @@ export default {
         button: '',
         active: false
       },
-      blocks: [
-        {
-          title: 'Epulze',
-          id: 1,
-          bots: [
-            {
-              id: 2,
-              game: 'Dota 2',
-              lastUpdate: '12 Jun 12:23',
-              result: {
-                status: undefined
-              }
-            },
-            {
-              id: 3,
-              game: 'CS:GO',
-              lastUpdate: '12 Jun 00:00',
-              result: {
-                status: undefined
-              }
-            }
-          ]
-        },
-        {
-          title: 'Epulze',
-          id: 1,
-          bots: [
-            {
-              id: 2,
-              game: 'Dota 2',
-              lastUpdate: '12 Jun 12:23',
-              result: {
-                status: undefined
-              }
-            },
-            {
-              id: 3,
-              game: 'CS:GO',
-              lastUpdate: '12 Jun 00:00',
-              result: {
-                status: undefined
-              }
-            }
-          ]
-        }
-      ]
+      blocks: []
     }
   },
-  created() {},
+  created() {
+    this.$axios
+      .get('/api/bots/list')
+      .then(res => {
+        for (let bot of res.data) {
+          bot.bots = []
+
+          for (let game of bot.games) {
+            bot.bots.push({ game: game, result: { status: undefined } })
+          }
+        }
+        this.blocks = res.data
+      })
+      .catch(err => console.log(err))
+  },
   mounted() {},
   watch: {},
   methods: {
-    runAll(id, org) {
+    dateFromNow(date) {
+      return moment(date).fromNow()
+    },
+    runAll(org, game = null) {
       this.popup.loading = false
       this.popup.active = true
       this.popup.title = 'Are you sure?'
       this.popup.message = `You are going to RUN all tourneys by ${org}`
       this.popup.button = 'Confirm'
-      this.$on('confirmPopup', async () => {
+      this.$once('confirmPopup', async () => {
         this.popup.title = ''
         this.popup.message = ''
         this.popup.button = ''
         this.popup.loading = true
-        // let answer = await this.$axios.post(`/api/bots/runallby/${id}`)
-        // HARDCODED
-        let asnwer = {
-          title: 'Success',
-          message: '52 tourneys are hidden'
-        }
-        this.popup.loading = false
-        this.popup.title = asnwer.title
-        this.popup.message = asnwer.message
+        let answer = await this.$axios
+          .post(`/api/tourneys/set-status`, { organisator: org, game })
+          .then(res => {
+            this.popup.loading = false
+            this.popup.title = 'Successfully updated.'
+            this.popup.message = ''
+          })
+          .catch(err => console.log('Error occured.'))
       })
     },
-    stopAll(id, org) {
+    stopAll(org, game) {
       this.popup.loading = false
       this.popup.active = true
       this.popup.title = 'Are you sure?'
       this.popup.message = `You are going to STOP all tourneys by ${org}`
       this.popup.button = 'Confirm'
-      this.$on('confirmPopup', async () => {
+      this.$once('confirmPopup', async () => {
         this.popup.title = ''
         this.popup.message = ''
         this.popup.button = ''
         this.popup.loading = true
-        // let answer = await this.$axios.post(`/api/bots/stopallby/${id}`)
-        // HARDCODED
-        let asnwer = {
-          title: 'Success',
-          message: '52 tourneys are hidden'
-        }
-        this.popup.loading = false
-        this.popup.title = asnwer.title
-        this.popup.message = asnwer.message
-      })
-    },
-    async launchBot(blockIndex, botIndex, id) {
-      this.blocks[blockIndex].bots[botIndex].result.status = 0
-      // let result = await this.$axios.post(`/api/bots/launch/${id}`)
-      // HARDCODED
-      let result = await new Promise(res => {
-        setTimeout(() => {
-          res({
-            status: 1,
-            message: 'Турниров добавлено: 28'
-          })
-        }, 2000)
-      })
 
-      this.blocks[blockIndex].bots[botIndex].result = result
+        let answer = await this.$axios
+          .post(`/api/tourneys/set-status`, {
+            organisator: org,
+            game,
+            status: 0
+          })
+          .then(res => {
+            this.popup.loading = false
+            this.popup.title = 'Successfully updated.'
+            this.popup.message = ''
+          })
+          .catch(err => console.log('Error occured.'))
+      })
     },
-    async confirmAll(id) {
-      // let result = await this.$axios.post(`/api/bots/launch/${id}`)
-      // HARDCODED
-      let result = await {
-        answer: 'Success!',
-        message: '28 tourneys confirmed'
-      }
+    launchBot(org, game, blockIndex, botIndex) {
+      this.blocks[blockIndex].bots[botIndex].result.status = 0
+      let result = this.$axios
+        .post(`/api/bots/${org}`, { game: game })
+        .then(res => {
+          this.blocks[blockIndex].lastUpdate = new Date()
+          this.blocks[blockIndex].bots[botIndex].result.status = 1
+          this.blocks[blockIndex].bots[botIndex].result.message = `Added ${
+            res.data
+          } tourneys.`
+        })
+        .catch(err => {
+          this.blocks[blockIndex].bots[botIndex].result.status = -1
+        })
     }
   },
   components: {
@@ -241,6 +208,11 @@ export default {
         text-transform: uppercase
         font-size: 1.4rem
         font-weight: 100
+      .hint
+        font-size: .8rem
+        margin-right: 15px
+        font-weight: 100
+        color: rgba(255, 255, 255, .3)
     .panel-content
       padding-left: 0
       padding-right: 0

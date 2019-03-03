@@ -21,7 +21,7 @@
           <select v-model="params.organisator">
             <!-- maybe should take from m-field -->
             <option selected value>Организатор</option>
-            <option value="Epulze">Epulze</option>
+            <option v-for="item in organisators" :value="item" :key="item">{{ item }}</option>
           </select>
           <i class="fas fa-angle-down"></i>
         </div>
@@ -34,6 +34,10 @@ export default {
   props: {
     paramsTemplate: {
       type: Object,
+      required: false
+    },
+    game: {
+      type: String,
       required: false
     }
   },
@@ -50,11 +54,16 @@ export default {
         solo: false,
         duo: false,
         squad: false
-      }
+      },
+      organisators: []
     }
   },
-  created() {
-    console.log(this.paramsTemplate)
+  async created() {
+    let result = await this.$axios
+      .post('/api/tourneys/orgs/', { game: this.game })
+      .catch(err => console.log('Error occured'))
+
+    this.organisators = result.data
   },
   watch: {
     params: {

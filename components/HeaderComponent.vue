@@ -18,14 +18,13 @@
                 <nuxt-link to="/faq">FAQ</nuxt-link>
               </li>
               <li @mouseleave="gamesList(0)" class="game-picker">
-                <no-ssr>
-                  <a :class="currentGameInfo.link" @mouseover="gamesList(1)">
-                    <!-- ADD GAME LOGO HERE -->
-                    {{ currentGameInfo.title }}
-                    <!-- THIN ANGLE NEEDED -->
-                    <i class="fas fa-angle-down"></i>
-                  </a>
-
+                <a :class="currentGameInfo.link" @mouseover="gamesList(1)">
+                  <!-- ADD GAME LOGO HERE -->
+                  <span>{{ currentGameInfo.title }}</span>
+                  <!-- THIN ANGLE NEEDED -->
+                  <i class="fas fa-angle-down"></i>
+                </a>
+                <keep-alive>
                   <div class="games-list" ref="gamesList">
                     <nuxt-link
                       v-for="game in gamesMenu"
@@ -34,7 +33,7 @@
                       :class="game.link"
                     >{{ game.shortTitle || game.title }}</nuxt-link>
                   </div>
-                </no-ssr>
+                </keep-alive>
               </li>
               <li>
                 <a href="https://vk.com/cybpoint" target="_blank">
@@ -62,9 +61,7 @@ export default {
       showedMenu: false
     }
   },
-  created() {
-    console.log(this.currentGameInfo)
-  },
+  created() {},
   mounted() {},
   computed: {
     ...mapGetters({
@@ -87,10 +84,7 @@ export default {
           display: 'block',
           opacity: '1'
         })
-        console.log('showing')
       } else {
-        console.log('hiding')
-
         TweenMax.to(gamesList, 0, { display: 'none', opacity: '0' })
       }
     },
@@ -177,15 +171,30 @@ export default {
               background-position: center center
               white-space: nowrap
               cursor: default
-              transition: 0s
+              transition: .25s
               background-color: $darkBlue3
               &:hover
                 background-color: $darkBlue1
               &.dota
                 background-image: url(../static/common/game-button-bg/dota.png)
                 background-color: $dotaPrimary
-                &:hover
+                &:hover 
                   background-color: $dotaColorful
+              &.pubg
+                background-image: url(../static/common/game-button-bg/pubg.png)
+                background-color: $pubgPrimary
+                &:hover
+                  background-color: $pubgColorful
+              &.csgo
+                background-image: url(../static/common/game-button-bg/csgo.png)
+                background-color: $csgoPrimary
+                &:hover
+                  background-color: $csgoColorful
+              &.hs
+                background-image: url(../static/common/game-button-bg/hs.png)
+                background-color: $hsPrimary
+                &:hover
+                  background-color: $hsColorful
             .games-list
               @include shadow(2)
               display: none

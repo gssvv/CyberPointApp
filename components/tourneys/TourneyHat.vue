@@ -1,18 +1,34 @@
 <template>
-  <div class="l-row hat bg">
+  <div
+    class="l-row hat bg"
+    :style="popup ? {
+    backgroundImage: `url(/tourneys-page/${gameChosen}-tourney-banner.jpg)`
+    } : ''"
+  >
     <div class="short-info">
-      <h1 class="title">{{ tourney.title }}</h1>
+      <h1 class="title">
+        {{ tourney.title }}
+        <nuxt-link :to="mlink" v-if="mlink">
+          <i class="fas fa-pen edit-button"></i>
+        </nuxt-link>
+      </h1>
       <div class="attributes">
         <div class="item" v-if="tourney.teamMode">{{ tourney.matchMode }}</div>
         <div class="item" v-if="tourney.teamMode">{{ tourney.teamMode }}</div>
         <div class="item">{{ (!tourney.price) ? ('Бесплатно') : (tourney.price + ' с игрока') }}</div>
       </div>
       <div class="price-and-reg">
-        <div class="price" v-if="tourney.prize">
+        <div class="price" v-if="tourney.prize" v-tooltip.top-end="'Суммарно'">
           <span class="num">{{ tourney.prize }}</span>
           <span class="label">Призовой фонд</span>
         </div>
-        <a v-if="tourney.link" target="_blank" :href="tourney.link" class="button">
+        <a
+          v-if="tourney.link"
+          target="_blank"
+          :href="tourney.link"
+          class="button"
+          v-tooltip.auto="'Перейти на страницу с турниром для регистрации'"
+        >
           <span>Участвовать</span>
         </a>
       </div>
@@ -44,12 +60,17 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import Cookies from 'js-cookie'
+import jwt from 'jsonwebtoken'
+
 export default {
   props: {
     tourney: {
       type: Object,
       required: true
-    }
+    },
+    popup: Boolean
   },
   data() {
     return {
@@ -59,19 +80,31 @@ export default {
         minutes: '00',
         seconds: '00',
         stop: false
-      }
+      },
+      mlink: null
     }
+  },
+  created() {
+    this.$axios
+      .get('/api/users/me')
+      .then(res => {
+        if (res.data.privilege == 'admin' || 'moderator')
+          this.mlink = {
+            name: `panel-edit`,
+            params: { edit: this.tourney.id }
+          }
+      })
+      .catch(err => false)
+  },
+  computed: {
+    ...mapState(['gameChosen'])
   },
   watch: {
     tourney() {
-      console.log('watch')
       this.timerFunc()
     }
   },
   mounted() {
-    console.log('mounted')
-    console.log(this.tourney.date)
-
     this.timerFunc()
   },
   destroyed() {
@@ -85,6 +118,7 @@ export default {
       let diff = (new Date(this.tourney.date) - new Date()) / 1000
 
       if (diff < 0) return (this.timer.stop = true)
+      this.updateTimer(diff)
       let refreshTimer = setInterval(() => {
         diff -= 1
         if (diff < 0 || this.timer.stop) {
@@ -92,32 +126,29 @@ export default {
           clearInterval(refreshTimer)
           return
         }
-        console.log('tick')
-        // console.log(diff / 1000 / 60 / 60)
-        //days left
-        this.timer.days = Math.floor(diff / 60 / 60 / 24)
-        //hours left
-        this.timer.hours = Math.floor(diff / 60 / 60) - 24 * this.timer.days
-        this.timer.minutes =
-          Math.floor(diff / 60) - 60 * (24 * this.timer.days + this.timer.hours) //minutes left
-        this.timer.seconds =
-          Math.floor(diff) -
-          60 *
-            (this.timer.minutes +
-              60 * (24 * this.timer.days + this.timer.hours)) //days left
-
-        this.timer.hours =
-          this.timer.hours < 10 ? `0${this.timer.hours}` : this.timer.hours
-        this.timer.minutes =
-          this.timer.minutes < 10
-            ? `0${this.timer.minutes}`
-            : this.timer.minutes
-        this.timer.seconds =
-          this.timer.seconds < 10
-            ? `0${this.timer.seconds}`
-            : this.timer.seconds
-        // console.log(days, hours, minutes, seconds)
+        this.updateTimer(diff)
       }, 1000)
+    },
+    updateTimer(diff) {
+      // console.log(diff / 1000 / 60 / 60)
+      //days left
+      this.timer.days = Math.floor(diff / 60 / 60 / 24)
+      //hours left
+      this.timer.hours = Math.floor(diff / 60 / 60) - 24 * this.timer.days
+      this.timer.minutes =
+        Math.floor(diff / 60) - 60 * (24 * this.timer.days + this.timer.hours) //minutes left
+      this.timer.seconds =
+        Math.floor(diff) -
+        60 *
+          (this.timer.minutes + 60 * (24 * this.timer.days + this.timer.hours)) //days left
+
+      this.timer.hours =
+        this.timer.hours < 10 ? `0${this.timer.hours}` : this.timer.hours
+      this.timer.minutes =
+        this.timer.minutes < 10 ? `0${this.timer.minutes}` : this.timer.minutes
+      this.timer.seconds =
+        this.timer.seconds < 10 ? `0${this.timer.seconds}` : this.timer.seconds
+      // console.log(days, hours, minutes, seconds)
     }
   }
 }
@@ -161,6 +192,9 @@ export default {
       font-weight: 600
       margin: 0
       text-align: center
+      .edit-button 
+        font-size: 1.3rem
+        transform: translate(10px, -3px)
     .attributes
       display: grid
       grid-auto-flow: column
@@ -180,6 +214,7 @@ export default {
       .price
         font-size: 3rem
         font-weight: 400
+        cursor: default
         span
           display: block
           line-height: 1

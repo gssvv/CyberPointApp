@@ -55,6 +55,11 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ commit, dispatch, state }, { req }) {
+    await this.$axios
+      .get('/api/games/')
+      .then(res => commit('SET_GAMES_LIST', res.data))
+      .catch(err => console.log(err))
+
     if (req.headers.cookie) {
       const cookie = cookieparser.parse(req.headers.cookie)
 
@@ -64,11 +69,6 @@ export const actions = {
         dispatch('checkUser', cookie.auth_token)
       }
     }
-
-    await this.$axios
-      .get('/api/games/')
-      .then(res => commit('SET_GAMES_LIST', res.data))
-      .catch(err => console.log(err))
   },
   setGame({ commit }, game) {
     commit('SET_GAME', game)

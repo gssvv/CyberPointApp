@@ -12,7 +12,7 @@
           Открыть на новой странице
         </nuxt-link>
       </div>
-      <tourney-hat :tourney="tourney" v-if="active"/>
+      <tourney-hat :tourney="tourney" v-if="active" :popup="true"/>
       <div class="l-content content">
         <tourney-columns :tourney="tourney"/>
       </div>
@@ -99,7 +99,6 @@ export default {
         opacity: 0
         pointer-events: none
   .hat.bg
-    background-image: url(../../static/tourneys-page/dota-tourney-banner.jpg)
     background-position: center center
     background-size: cover
   .container

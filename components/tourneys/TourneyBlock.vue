@@ -2,11 +2,14 @@
   <div class="m-tourney-item m-universal-block">
     <div class="tourney-header ub-dark-top">
       <div class="logo">
-        <img :src="`/organisators/${tourney.organisator.toLowerCase()}.png`" alt>
+        <img
+          :src="`/organisators/${tourney.organisator.toLowerCase()}.png`"
+          :alt="`Турниры от ${tourney.organisator}`"
+        >
       </div>
       <div class="short-info">
-        <p class="t-mode">{{ tourney.teamMode }}</p>
         <h4 class="game">{{ tourney.game }}</h4>
+        <p class="t-mode">{{ tourney.teamMode }}</p>
         <p class="g-mode">{{ tourney.matchMode }}</p>
         <p class="players">
           <i class="fas fa-user" v-for="i in tourney.members" :key="i"></i>
@@ -53,12 +56,12 @@ export default {
     getCalendar(date) {
       return moment(date).calendar()
     },
-    goToTourney(id) {
+    async goToTourney(id) {
       if (this.link) {
         return this.$router.push({ path: `/tournament/${this.tourney.id}` })
       }
+      await this.$store.dispatch('setFullTournament', id)
       this.$parent.$emit('goToTourney', id)
-      this.$store.dispatch('setFullTournament', id)
     }
   }
 }
@@ -91,9 +94,6 @@ export default {
       p
         margin: 0
       .t-mode
-        font-size: .8rem
-        text-transform: uppercase
-      .game
         font-size: 2rem
         margin: 0
         line-height: 1
@@ -101,16 +101,24 @@ export default {
         text-transform: uppercase
         font-weight: 600
         transform: translateX(-2px)
+      .game
+        font-weight: 400
+        margin: 0
+        font-size: 1rem
+        text-transform: uppercase
       .g-mode
         font-size: .9rem
         text-transform: uppercase
+        font-weight: 400
       .players
         font-size: .9rem
         margin-top: 5px
         letter-spacing: 2px
+        font-weight: 400
       .date
         font-size: 1.2rem
         margin-top: 5px
+        font-weight: 400
   .tourney-content
     display: grid
     .low-row
@@ -126,7 +134,7 @@ export default {
     .charge
       margin: 0
       font-size: 1rem
-      font-weight: 100
+      font-weight: 400
       color: $paleBlue
     .reward
       margin-top: 10px

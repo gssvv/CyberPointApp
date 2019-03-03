@@ -2,7 +2,10 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'universal',
-
+  transition: {
+    name: 'page',
+    mode: 'out-in'
+  },
   /*
    ** Headers of the page
    */
@@ -41,7 +44,11 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: ['@/assets/style/main.sass', '@/assets/style/fa.all.min.css'],
+  css: [
+    '@/assets/style/main.sass',
+    '@/assets/style/fa.all.min.css',
+    '@/assets/transition.css'
+  ],
 
   /*
    ** Plugins to load before mounting the App

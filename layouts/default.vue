@@ -19,5 +19,4 @@ export default {
 
 <style lang="sass">
 @import '@/assets/style/_variables.sass'
-
 </style>

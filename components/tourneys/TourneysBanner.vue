@@ -3,14 +3,14 @@
     <div class="container">
       <div class="l-content wrapper">
         <div class="title">
-          <img :src="`icons/${gameInfo.link}-logo.svg`" alt>
-          <h2>{{ gameInfo.shortTitle || gameInfo.title }}</h2>
+          <img :src="`icons/${game.link}-logo.svg`" :alt="`Турниры по ${game.title}`">
+          <h2>{{ game.shortTitle || game.title }}</h2>
         </div>
         <!-- HERE SHOULD BE SEO STUFF  -->
         <h1>
-          <strong>Любительские турниры по {{ gameInfo.title }} для начинающих игроков и команд</strong>
+          <strong>Любительские турниры по {{ game.title }} для начинающих игроков и команд</strong>
         </h1>
-        <strong class="description-hidden">{{ gameInfo.description }}</strong>
+        <strong class="description-hidden">{{ game.description }}</strong>
       </div>
     </div>
   </div>
@@ -23,8 +23,12 @@ export default {
       required: true
     }
   },
+  created() {
+    this.game = this.gameInfo
+  },
   data() {
     return {
+      game: '',
       bannerStyle: {
         backgroundImage: `url(/tourneys-page/${this.gameInfo.link}-banner.jpg)`
       }
@@ -92,12 +96,14 @@ export default {
         img
           height: 120px
           margin-right: 15px
+          width: 120px
       @include respond-to(md)
         .title
           h2
             font-size: 5rem
           img
             height: 70px
+            width: 70px
             margin-right: 5px
         h1
           font-size: 1rem
@@ -109,6 +115,7 @@ export default {
           img
             height: 60px
             margin-right: 5px
+            width: 60px
         h1
           margin-top: 10px
           text-align: center

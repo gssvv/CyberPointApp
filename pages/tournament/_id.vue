@@ -1,6 +1,11 @@
 <template>
   <div class="l-tourney page">
-    <div class="container bg">
+    <div
+      class="container bg"
+      :style="{
+    backgroundImage: `url(/tourneys-page/${gameChosen}-tourney-banner.jpg)`
+    }"
+    >
       <tourney-hat :tourney="tourney"/>
     </div>
     <div class="container">
@@ -23,7 +28,8 @@ import _ from 'lodash'
 export default {
   computed: {
     ...mapState({
-      tourney: 'fullTournament'
+      tourney: 'fullTournament',
+      gameChosen: 'gameChosen'
     })
   },
   data() {
@@ -74,7 +80,6 @@ export default {
 
 .l-tourney
   .container.bg
-    background-image: url(../../static/tourneys-page/dota-tourney-banner.jpg)
     background-position: center center
     background-size: cover
   .container

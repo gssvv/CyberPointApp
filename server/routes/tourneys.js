@@ -88,7 +88,7 @@ router.post('/list', async (req, res) => {
 
   let tourneys = await Tourney.find({
     status: 1,
-    // date: { $gt: new Date() },
+    date: { $gt: new Date() },
     game: req.body.game,
     ...params
   })
@@ -383,6 +383,23 @@ router.post('/set-status', auth, async (req, res) => {
 
   if (!tourney._headerSent)
     return res.send(tourney.n + ' tourneys have been updated.')
+})
+
+router.post('/orgs', async (req, res) => {
+  let game = req.body.game ? req.body.game : { $ne: '' }
+
+  // get and set ID
+  let query = await Tourney.find({ status: 1, game })
+    .select({ organisator: 1 })
+    .catch(err => res.status(400).send(err.message))
+
+  if (!res.headersSent) {
+    for (item in query) {
+      query[item] = query[item].organisator
+    }
+
+    return res.send(_.union(query))
+  }
 })
 
 module.exports = router

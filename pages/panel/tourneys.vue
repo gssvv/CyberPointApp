@@ -100,7 +100,8 @@ export default {
           })
           .catch(err => console.log(err))) || {}
 
-      this.pagination = tourneys.length < 10 ? null : tourneys.length
+      this.pagination =
+        tourneys.length < 10 ? null : this.pagination + tourneys.length
 
       for (let i of tourneys) {
         this.tourneys.push(i)

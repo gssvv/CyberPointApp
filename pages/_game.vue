@@ -2,7 +2,11 @@
   <div>
     <!-- set game for banner -->
     <tourneys-banner :gameInfo="gameInfo"/>
-    <tourneys-filters @updateParams="setParams" :paramsTemplate="paramsTemplate"/>
+    <tourneys-filters
+      :game="gameInfo.title"
+      @updateParams="setParams"
+      :paramsTemplate="paramsTemplate"
+    />
     <tourneys-list :tourneysArray="tourneysArray"/>
 
     <div class="container" v-if="loading">
@@ -67,9 +71,7 @@ export default {
       this.activePopup = true
     })
   },
-  mounted() {
-    this.$el
-  },
+  mounted() {},
   middleware: 'gameTourneys',
   computed: {
     ...mapGetters({
@@ -89,7 +91,7 @@ export default {
         this.addTourneys()
     },
     async addTourneys() {
-      if (this.pagination == null) return
+      if (this.pagination == null || this.tourneysArray.length < 6) return
 
       this.loading = true
 

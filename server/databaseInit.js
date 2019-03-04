@@ -5,8 +5,8 @@ mongoose
     'mongodb://localhost:27017/cybpoint',
     {
       useNewUrlParser: true,
-      user: 'Gusev',
-      pass: 'KfH0UkQLzGCl',
+      user: 'Cybpoint',
+      pass: 'KfH0UkQLzGCl1',
       auth: {
         authSource: 'admin'
       }

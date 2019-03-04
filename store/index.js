@@ -110,7 +110,7 @@ export const actions = {
   async signIn({ commit }, data) {
     let answer = await this.$axios
       .post('/api/users/auth', data)
-      .catch(err => console.log(err.response.data))
+      .catch(err => console.log(err))
 
     if (!answer) return false
 

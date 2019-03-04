@@ -5,8 +5,8 @@
 <script>
 export default {
   components: {},
-  created() {
-  }
+  created() {},
+  middleware: 'redirectToTourneys'
 }
 </script>
 

@@ -11,7 +11,6 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_swplugin_2a5280f0 from 'nuxt_plugin_swplugin_2a5280f0' // Source: ./sw.plugin.js (mode: 'client')
 import nuxt_plugin_nuxticons_6ead6d39 from 'nuxt_plugin_nuxticons_6ead6d39' // Source: ./nuxt-icons.js (mode: 'all')
 import nuxt_plugin_axios_4a5d496f from 'nuxt_plugin_axios_4a5d496f' // Source: ./axios.js (mode: 'all')
 import nuxt_plugin_clickoutside_2f27d4ea from 'nuxt_plugin_clickoutside_2f27d4ea' // Source: ..\\plugins\\click-outside.js (mode: 'all')
@@ -160,10 +159,6 @@ async function createApp(ssrContext) {
   if (typeof nuxt_plugin_clickoutside_2f27d4ea === 'function') await nuxt_plugin_clickoutside_2f27d4ea(app.context, inject)
   if (typeof nuxt_plugin_vtooltip_ae7b5682 === 'function') await nuxt_plugin_vtooltip_ae7b5682(app.context, inject)
   if (typeof nuxt_plugin_scroll_8d17fed4 === 'function') await nuxt_plugin_scroll_8d17fed4(app.context, inject)
-
-  if (process.client) {
-    if (typeof nuxt_plugin_swplugin_2a5280f0 === 'function') await nuxt_plugin_swplugin_2a5280f0(app.context, inject)
-  }
 
   // If server-side, wait for async component to be resolved first
   if (process.server && ssrContext && ssrContext.url) {

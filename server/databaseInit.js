@@ -16,11 +16,11 @@ const settings =
 
 mongoose
   .connect(
-    // 'mongodb://46.101.24.197:27017/cybpoint',
-    'mongodb://127.0.0.1:27017/cybpoint',
+    'mongodb://46.101.24.197:27017/cybpoint',
+    // 'mongodb://127.0.0.1:27017/cybpoint',
     settings
   )
-  .then(() => console.log('Connected to MongoDB...'))
+  .then(() => console.log('Connected to MongoDB...', settings))
   .catch(err => console.log('Error occured connecting to MongoDB:', err))
 
 module.exports = mongoose

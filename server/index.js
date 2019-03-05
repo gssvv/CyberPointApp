@@ -32,7 +32,7 @@ async function start() {
 
   const {
     host = process.env.HOST || '127.0.0.1',
-    port = process.env.PORT || 3001
+    port = process.env.PORT || 3000
   } = nuxt.options.server
 
   if (process.env.DEV_TYPE !== 'backend') {

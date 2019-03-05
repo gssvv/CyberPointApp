@@ -27,7 +27,7 @@
           target="_blank"
           :href="tourney.link"
           class="button"
-          v-tooltip.auto="'Перейти на страницу с турниром для регистрации'"
+          v-tooltip.top="'Перейти на страницу с турниром для регистрации'"
         >
           <span>Участвовать</span>
         </a>

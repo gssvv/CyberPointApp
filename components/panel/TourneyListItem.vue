@@ -18,9 +18,6 @@
       <div class="icon-wrapper" @click="edit()" v-tooltip.top-end="'Edit'">
         <i class="fas fa-edit"></i>
       </div>
-      <div class="icon-wrapper" @click="copy()" v-tooltip.top-end="'Copy'">
-        <i class="fas fa-copy"></i>
-      </div>
       <div class="icon-wrapper" v-if="data.status == 1" @click="stop()" v-tooltip.top-end="'Stop'">
         <i class="fas fa-stop-circle"></i>
       </div>
@@ -84,12 +81,6 @@ export default {
       this.$router.push({
         name: `panel-edit`,
         params: { edit: this.data.id }
-      })
-    },
-    copy() {
-      this.$router.push({
-        name: `panel-edit`,
-        params: { copy: this.data.id }
       })
     },
     async stop() {

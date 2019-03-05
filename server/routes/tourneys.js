@@ -215,6 +215,7 @@ router.post('/add', auth, async (req, res) => {
 
   // set ADDEDBY to current user
   req.body.addedby = user.username
+  req.body.dateAdded = new Date()
 
   // get and set ID
   let { id } = await Tourney.findOne()

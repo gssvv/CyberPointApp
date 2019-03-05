@@ -132,6 +132,13 @@
               <common-button @click.native="send()">Save</common-button>
               <common-button @click.native="check()">Check</common-button>
             </div>
+            <div class="group mobile jcse">
+              <field-checkbox
+                v-model="sendAsCopy"
+                :title="'New tournament'"
+                v-tooltip="'Add new tourney with current info.'"
+              />
+            </div>
             <div class="group mobile jcse message">{{ message }}</div>
           </form>
         </div>
@@ -160,6 +167,7 @@ export default {
     return {
       pageTitle: 'Add Tournament',
       message: '',
+      sendAsCopy: false,
       tourney: {
         id: {
           val: null,
@@ -409,12 +417,8 @@ export default {
     if (this.$route.params != {}) {
       if (this.$route.params.edit) {
         this.pageTitle = 'Edit Tournament'
-        // with ID
-        this.loadTourney(this.$route.params.edit, true)
-      } else if (this.$route.params.copy) {
-        this.pageTitle = 'Add Copied Tournament'
-        // without ID
-        this.loadTourney(this.$route.params.copy, false)
+        this.loadTourney(this.$route.params.edit)
+        // load tourney with id
       }
     }
   },
@@ -466,7 +470,7 @@ export default {
     }
   },
   methods: {
-    async loadTourney(id, needsId) {
+    async loadTourney(id) {
       let { data: tourney } =
         (await this.$axios
           .post('/api/tourneys/admin-list', { id: id, full: true })
@@ -479,10 +483,6 @@ export default {
       _.mapKeys(this.tourney, function(value, key) {
         value.val = tourney[key]
       })
-
-      if (!needsId) {
-        this.tourney.id.val = null
-      }
     },
     validate(fieldName) {
       let field = this.tourney[fieldName]
@@ -522,7 +522,7 @@ export default {
       })
       if (!error) {
         // add new tourney
-        if (!this.tourney.id.val) {
+        if (!this.tourney.id.val || this.sendAsCopy) {
           this.message = 'Loading...'
           this.$axios
             .post('/api/tourneys/add', this.getTourneyObject())
@@ -535,18 +535,13 @@ export default {
                 id
               this.pageTitle = 'Edit Tournament'
             })
-        }
-        // edit existing tourney
-        if (this.tourney.id.val) {
+        } else if (this.tourney.id.val) {
           this.message = 'Loading...'
           this.$axios
             .post('/api/tourneys/edit/', this.getTourneyObject())
             .catch(err => console.log(err))
             .then(res => {
-              this.message = 'Tourney successfully updated!'
-              setTimeout(() => {
-                this.message = 'Tourney saved.'
-              }, 5000)
+              this.message = 'Tourney saved.'
             })
         }
       } else {

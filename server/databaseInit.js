@@ -16,8 +16,8 @@ const settings =
 
 mongoose
   .connect(
-    // 'mongodb://46.101.24.197:27017/cybpoint',
-    'mongodb://127.0.0.1:27017/cybpoint',
+    'mongodb://46.101.24.197:27017/cybpoint',
+    // 'mongodb://127.0.0.1:27017/cybpoint',
     {
       useNewUrlParser: true
       // user: 'Cybpoint',

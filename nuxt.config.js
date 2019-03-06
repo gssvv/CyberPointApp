@@ -32,6 +32,8 @@ module.exports = {
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     jwtPrivateKey: process.env.JWT_PRIVATE_KEY || 'jwtKey'
+    // DB_PASS
+    // PORT
   },
 
   /*

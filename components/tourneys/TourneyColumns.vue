@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import VkWidget from '@/components/vkWidget'
+import VkWidget from '@/components/VkWidget'
 export default {
   props: {
     tourney: {

@@ -39,7 +39,7 @@ module.exports = {
       {
         hid: 'og:image',
         property: 'og:image',
-        content: `/icon.png`
+        content: `/logo-dark.png`
       }
     ],
     link: [

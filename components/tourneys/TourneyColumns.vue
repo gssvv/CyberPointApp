@@ -31,16 +31,7 @@
     </div>
 
     <div class="column">
-      <script type="text/javascript" src="https://vk.com/js/api/openapi.js?160"></script>
-      <!-- VK Widget -->
-      <div id="vk_groups"></div>
-      <script type="text/javascript">
-        VK.Widgets.Group(
-          'vk_groups',
-          { mode: 3, no_cover: 1, color1: '1E2B40', color2: 'FFFFFF', width: 'auto' },
-          151813510
-        )
-      </script>
+      <vk-widget :game="tourney.game"/>
 
       <!-- APPLICATIONS -->
       <!-- <div class="m-universal-block light item">
@@ -92,6 +83,7 @@
 </template>
 
 <script>
+import VkWidget from '@/components/vkWidget'
 export default {
   props: {
     tourney: {
@@ -102,9 +94,9 @@ export default {
   data() {
     return {}
   },
-  computed: {},
-  created() {},
-  mounted() {}
+  components: {
+    VkWidget
+  }
 }
 </script>
 

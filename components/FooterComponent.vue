@@ -37,6 +37,7 @@ export default {
     grid-auto-columns: 1fr
     color: rgba(255,255,255,.3)
     font-size: .9rem
+    grid-gap: 10px
     .item:nth-child(1)
       justify-self: flex-start
     .item:nth-child(2)
@@ -45,4 +46,8 @@ export default {
       color: #fff
     .item:nth-child(3)
       justify-self: flex-end
+    @include respond-to(md)
+      grid-auto-flow: row
+      .item
+        justify-self: center !important
 </style>

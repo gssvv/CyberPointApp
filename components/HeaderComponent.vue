@@ -4,7 +4,7 @@
       <div class="l-content">
         <div class="wrapper">
           <nuxt-link class="logo" to="/">
-            <img src="/common/game-button-bg/dota.png" alt="Киберспортивные турниры">
+            <img src="/logo.png" alt="Киберспортивные турниры">
           </nuxt-link>
           <div class="menu" v-click-outside="hideMenu">
             <ul ref="menu">
@@ -14,9 +14,9 @@
               <li>
                 <nuxt-link :to="`/${currentGameInfo.link}`">Турниры</nuxt-link>
               </li>
-              <li>
+              <!-- <li>
                 <nuxt-link to="/faq">FAQ</nuxt-link>
-              </li>
+              </li>-->
               <li @mouseleave="gamesList(0)" class="game-picker">
                 <a :class="currentGameInfo.link" @mouseover="gamesList(1)">
                   <!-- ADD GAME LOGO HERE -->
@@ -123,6 +123,7 @@ export default {
     .logo
       text-decoration: none
       img
+        padding: 5px 0
         height: 100%
     .menu
       position: relative

@@ -6,11 +6,8 @@ module.exports = {
     name: 'page',
     mode: 'out-in'
   },
-  /*
-   ** Headers of the page
-   */
   head: {
-    title: pkg.name,
+    title: 'CyberPoint – поиск киберспортивных онлайн-турниров',
     meta: [
       {
         charset: 'utf-8'
@@ -18,6 +15,27 @@ module.exports = {
       {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content:
+          'CyberPoint собирает информацию о киберспортивных онлайн-турнирах в одном месте для того, чтобы игроки могли узнавать о них одними из первых и могли принять в них участие. Турниры собираются с сайтов-организаторов, и отображаются все вместе на одной странице по каждой из игр, среди которых есть Dota 2, PUBG, CS:GO и Hearthstone.'
+      },
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: `CyberPoint – поиск киберспортивных онлайн-турниров`
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: `CyberPoint собирает информацию о киберспортивных онлайн-турнирах в одном месте для того, чтобы игроки могли узнавать о них одними из первых и могли принять в них участие. Турниры собираются с сайтов-организаторов, и отображаются все вместе на одной странице по каждой из игр, среди которых есть Dota 2, PUBG, CS:GO и Hearthstone.`
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: `/icon.png`
       }
     ],
     link: [
@@ -31,59 +49,29 @@ module.exports = {
 
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
-    jwtPrivateKey: process.env.JWT_PRIVATE_KEY || 'jwtKey'
+    jwtPrivateKey: process.env.JWT_PRIVATE_KEY || 'jwtPriVateKey'
     // DB_PASS
     // PORT
   },
-
-  /*
-   ** Customize the progress-bar color
-   */
   loading: {
     color: '#fff'
   },
-
-  /*
-   ** Global CSS
-   */
   css: [
     '@/assets/style/main.sass',
     '@/assets/style/fa.all.min.css',
     '@/assets/transition.css'
   ],
-
-  /*
-   ** Plugins to load before mounting the App
-   */
   plugins: [
     '@/plugins/click-outside.js',
     '@/plugins/v-tooltip.js',
     '@/plugins/scroll.js'
   ],
-
-  /*
-   ** Nuxt.js modules
-   */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa'
-  ],
-  /*
-   ** Axios module configuration
-   */
+  modules: ['@nuxtjs/axios', '@nuxtjs/pwa'],
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
     baseURL: process.env.BASE_URL || 'http://localhost:3000'
   },
 
-  /*
-   ** Build configuration
-   */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
     extend(config, ctx) {}
   }
 }

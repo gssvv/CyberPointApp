@@ -26,6 +26,36 @@ import RecommendedSection from '@/components/tourneys/RecommendedSection'
 import _ from 'lodash'
 
 export default {
+  head() {
+    return {
+      title: `${this.tourney.title} | Онлайн-турниры по ${
+        this.tourney.game
+      } | Cyberpoint`,
+      meta: [
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: `${this.tourney.title} | Онлайн-турниры по ${
+            this.tourney.game
+          } | Cyberpoint`
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: `${this.tourney.title} от ${
+            this.tourney.organisator
+          } | Онлайн-турниры по ${this.tourney.game} | Cyberpoint`
+        },
+        {
+          hid: 'og:description',
+          name: 'og:description',
+          content: `${this.tourney.title} от ${
+            this.tourney.organisator
+          } | Онлайн-турниры по ${this.tourney.game} | Cyberpoint`
+        }
+      ]
+    }
+  },
   computed: {
     ...mapState({
       tourney: 'fullTournament',

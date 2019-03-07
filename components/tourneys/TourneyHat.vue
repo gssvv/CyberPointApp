@@ -62,7 +62,6 @@
 <script>
 import { mapState } from 'vuex'
 import Cookies from 'js-cookie'
-import jwt from 'jsonwebtoken'
 
 export default {
   props: {
@@ -85,16 +84,19 @@ export default {
     }
   },
   created() {
-    this.$axios
-      .get('/api/users/me')
-      .then(res => {
-        if (res.data.privilege == 'admin' || 'moderator')
-          this.mlink = {
-            name: `panel-edit`,
-            params: { edit: this.tourney.id }
-          }
-      })
-      .catch(err => false)
+    let token = Cookies.get('auth_token')
+    if (token) {
+      this.$axios
+        .get('/api/users/me')
+        .then(res => {
+          if (res.data.privilege == 'admin' || 'moderator')
+            this.mlink = {
+              name: `panel-edit`,
+              params: { edit: this.tourney.id }
+            }
+        })
+        .catch(err => false)
+    }
   },
   computed: {
     ...mapState(['gameChosen'])
@@ -130,7 +132,6 @@ export default {
       }, 1000)
     },
     updateTimer(diff) {
-      // console.log(diff / 1000 / 60 / 60)
       //days left
       this.timer.days = Math.floor(diff / 60 / 60 / 24)
       //hours left
@@ -148,7 +149,6 @@ export default {
         this.timer.minutes < 10 ? `0${this.timer.minutes}` : this.timer.minutes
       this.timer.seconds =
         this.timer.seconds < 10 ? `0${this.timer.seconds}` : this.timer.seconds
-      // console.log(days, hours, minutes, seconds)
     }
   }
 }

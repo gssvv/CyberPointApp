@@ -31,6 +31,30 @@ import TourneyPopup from '@/components/tourneys/TourneyPopup'
 import _ from 'lodash'
 
 export default {
+  head() {
+    return {
+      title: `Любительские турниры по ${this.gameInfo.title} | Онлайн-турниры`,
+      meta: [
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: `Любительские турниры по ${
+            this.gameInfo.title
+          } | Онлайн-турниры`
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.gameInfo.description
+        },
+        {
+          hid: 'og:description',
+          name: 'og:description',
+          content: this.gameInfo.description
+        }
+      ]
+    }
+  },
   components: {
     TourneysBanner,
     TourneysFilters,

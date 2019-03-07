@@ -17,12 +17,21 @@
 import { mapState } from 'vuex'
 
 export default {
+  head: {
+    title: 'CyberPoint – поиск киберспортивных турниров',
+    meta: [
+      {
+        name: 'description',
+        content:
+          'CyberPoint собирает информацию о киберспортивных турнирах в одном месте для того, чтобы игроки могли узнавать о них одними из первых и могли принять в них участие. Турниры собираются с сайтов-организаторов, и отображаются все вместе на одной странице по каждой из игр, среди которых есть Dota 2, PUBG, CS:GO и Hearthstone.'
+      }
+    ]
+  },
   components: {},
   created() {},
   computed: {
     ...mapState(['games'])
   }
-  // middleware: 'redirectToTourneys'
 }
 </script>
 
@@ -52,9 +61,9 @@ export default {
     background-size: cover
     background-position: center center
     position: relative
-    transform: scale(1.25)
+    // transform: scale(1.25)
     cursor: pointer
-    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%)
+    // clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%)
     @include respond-to(md) 
       transform: inherit
       clip-path: inherit
@@ -65,13 +74,13 @@ export default {
         width: 100%
         height: 100%
         z-index: 0
-        opacity: .75
+        opacity: .9
         transition: .25s ease-in
     .icon
       width: 35% 
       z-index: 1
       margin: 50px 30px
     &:hover:after
-      opacity: .25
+      opacity: .5
 
 </style>

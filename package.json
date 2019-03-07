@@ -1,8 +1,8 @@
 {
-  "name": "CyberPointApp",
+  "name": "cyberpoint",
   "version": "1.0.0",
-  "description": "My smashing Nuxt.js project",
-  "author": "Alexander Gusev",
+  "description": "CyberPoint собирает информацию о киберспортивных турнирах в одном месте для того, чтобы игроки могли узнавать о них одними из первых и могли принять в них участие. Турниры собираются с сайтов-организаторов, и отображаются все вместе на одной странице по каждой из игр, среди которых есть Dota 2, PUBG, CS:GO и Hearthstone.",
+  "author": "gssv",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",

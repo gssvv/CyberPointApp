@@ -101,8 +101,6 @@ export const actions = {
 
     if (!fullTournament) return
 
-    console.log('set!')
-
     commit('SET_FULL_TOURNAMENT', fullTournament)
 
     return true

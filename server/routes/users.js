@@ -42,6 +42,8 @@ router.post('/auth', async (req, res) => {
     maxAge: 1000 * 60 * 60 * 24 * 1
   })
 
+  console.log(`User has been authenticated: ${user.username}`)
+
   res.status(200).send('User was successfully authorized.')
 })
 
@@ -95,6 +97,8 @@ router.post('/register', auth, async (req, res) => {
   }).catch(err => res.status(400).send('Unable to insert user.'))
 
   // ADD: SEND EMEAIL
+  console.log(`User has been registered: ${user.username}`)
+
   res.status(200).send('User has been successfully registered.')
 })
 
@@ -114,7 +118,8 @@ router.post('/delete', auth, async (req, res) => {
   if (!query) res.status(400).send('User is not found.')
   console.log(res.headerSent)
 
-  res.status(400).send('User successfully deleted.')
+  console.log(`User has been deleted: ${req.body.username}`)
+  res.status(400).send('User has been successfully deleted.')
 })
 
 router.post('/edit', auth, async (req, res) => {

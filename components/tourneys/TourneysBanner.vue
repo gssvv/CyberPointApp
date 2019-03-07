@@ -34,18 +34,6 @@ export default {
       }
     }
   },
-  head() {
-    return {
-      title: 'Любительские турниры по ',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: this.gameInfo.description
-        }
-      ]
-    }
-  }
 }
 </script>
 

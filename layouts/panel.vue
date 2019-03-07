@@ -61,6 +61,11 @@ import FooterComponent from '@/components/FooterComponent'
 import { mapState } from 'vuex'
 
 export default {
+  head() {
+    return {
+      title: `Admin Panel – Cyberpoint`
+    }
+  },
   data() {
     return {}
   },

@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('../databaseInit')
-const _ = require('lodash')
 const env = require('../../nuxt.config.js').env
 const auth = require('../middleware/auth')
-const { Bot, validate } = require('../models/bots')
+const { Bot } = require('../models/bots')
 
 router.get('/all', auth, async (req, res) => {
   if (
@@ -29,6 +28,7 @@ router.get('/all', auth, async (req, res) => {
     result.push(...(await botFunction[bot]()))
   }
 
+  console.log(`All bots have been run.`)
   res.send(result)
 })
 
@@ -70,7 +70,7 @@ router.post('/:bot', auth, async (req, res) => {
   let botFunction = require(`../bots/${bot.id}`)
   let result = await botFunction({ game })
   // must save to database and return how many added
-
+  console.log(`Bot has been run: ${bot.organisator} ${game}`)
   res.send(String(result.length))
 })
 

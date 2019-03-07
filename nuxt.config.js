@@ -6,6 +6,10 @@ module.exports = {
     name: 'page',
     mode: 'out-in'
   },
+  manifest: {
+    name: 'CyperPoint',
+    lang: 'ru'
+  },
   head: {
     title: 'CyberPoint – поиск киберспортивных онлайн-турниров',
     meta: [

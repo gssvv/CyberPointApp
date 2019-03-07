@@ -1,5 +1,5 @@
 <template>
-  <div class="l-tourney popup" :class="{hidebg: !active}" ref="popup">
+  <div class="l-tourney popup" :class="{hidebg: !active}" ref="popup" @click.self="togglePopup">
     <div class="container">
       <div class="l-row header">
         <div class="arrow-back" @click="togglePopup()">

@@ -11,9 +11,9 @@
         <h4 class="game">{{ tourney.game }}</h4>
         <p class="t-mode">{{ tourney.teamMode }}</p>
         <p class="g-mode">{{ tourney.matchMode }}</p>
-        <p class="players">
+        <!-- <p class="players">
           <i class="fas fa-user" v-for="i in tourney.players" :key="i"></i>
-        </p>
+        </p>-->
         <p class="date">{{ getCalendar(tourney.date) }}</p>
       </div>
     </div>

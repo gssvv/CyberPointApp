@@ -1,6 +1,6 @@
 <template>
   <div>
-    <script type="text/javascript" src="https://vk.com/js/api/openapi.js?160"></script>
+    <script type="text/javascript" src="https://vk.com/js/api/openapi.js?160" ref="script"></script>
     <!-- VK Widget -->
     <div id="vk_groups" ref="vkWrapper"></div>
   </div>
@@ -39,17 +39,19 @@ export default {
         default:
           id = 151813510
       }
-      VK.Widgets.Group(
-        'vk_groups',
-        {
-          mode: 3,
-          no_cover: 1,
-          color1: '1E2B40',
-          color2: 'FFFFFF',
-          width: 'auto'
-        },
-        id
-      )
+      try {
+        VK.Widgets.Group(
+          'vk_groups',
+          {
+            mode: 3,
+            no_cover: 1,
+            color1: '1E2B40',
+            color2: 'FFFFFF',
+            width: 'auto'
+          },
+          id
+        )
+      } catch (err) {}
     }
   }
 }

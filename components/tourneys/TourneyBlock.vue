@@ -12,7 +12,7 @@
         <p class="t-mode">{{ tourney.teamMode }}</p>
         <p class="g-mode">{{ tourney.matchMode }}</p>
         <p class="players">
-          <i class="fas fa-user" v-for="i in tourney.members" :key="i"></i>
+          <i class="fas fa-user" v-for="i in tourney.players" :key="i"></i>
         </p>
         <p class="date">{{ getCalendar(tourney.date) }}</p>
       </div>

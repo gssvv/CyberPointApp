@@ -1,10 +1,11 @@
+const { Tourney } = require('../models/tourneys')
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 
-// module.exports = async options => {
-const bot = async options => {
+module.exports = async options => {
   async function loadTourneys(options) {
-    let maxPages = (options.maxPages || 20) - 1
+    // because one less
+    const maxPages = 20 - 1
     const url = 'https://epulze.com/dota2/tournaments'
 
     const browser = await puppeteer.launch({
@@ -152,25 +153,25 @@ const bot = async options => {
     return result
   }
 
-  function dataToTourneys(dataArray) {
+  async function dataToTourneys(dataArray) {
     // remove existing tourneys by link
-    let existingTourneys = [
-      {
-        _id: 224,
-        link: 'https://epulze.com/ru/dota2/tournaments/9539'
-      },
-      {
-        id: 225,
-        link: 'https://epulze.com/ru/dota2/tournaments/9399',
-        status: 0
-      },
-      {
-        _id: 226,
-        link: 'https://epulze.com/ru/dota2/tournaments/9438'
-      }
-    ]
-    // get last id (hardcoded so far)
-    let id = 213
+    let existingTourneys = await Tourney.find({
+      organisator: 'Epulze',
+      date: { $gt: new Date() },
+      game: 'Dota 2'
+    })
+      .select({ link: 1 })
+      .limit(150)
+      .catch(err => console.log('Bot error:', err))
+
+    // last id
+    let id = await Tourney.find()
+      .select({ id: 1 })
+      .sort({ id: -1 })
+      .limit(1)
+      .catch(err => console.log('Bot error:', err))
+    id = id[0].id
+
     let tourneysArray = []
 
     for (let tourneyData of dataArray) {
@@ -206,17 +207,23 @@ const bot = async options => {
         dateAdded: new Date(),
         link: link,
         block1: block1,
-        block2: 'Информация отсутствует',
+        block2: tourneyData.prize + ' стороне-победителю',
         organisator: 'Epulze',
-        addedBy: 'EpulzeBot',
+        addedby: 'EpulzeBot',
         status: 0
       })
     }
 
-    return tourneysArray
+    let result
+
+    if (tourneysArray.length > 0)
+      result = await Tourney.collection
+        .insertMany(tourneysArray)
+        .catch(err => console.log('Bot error:', err))
+
+    let insertedCount = result ? result.insertedCount : 0
+    return { success: true, count: insertedCount }
   }
 
-  dataToTourneys(await loadTourneys(options))
+  return await dataToTourneys(await loadTourneys(options))
 }
-
-bot({ maxPages: 1 })

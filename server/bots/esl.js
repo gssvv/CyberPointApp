@@ -32,11 +32,13 @@ module.exports = async options => {
     })
 
     const page = await browser.newPage()
-    console.log('Connected to the page.')
+    console.log('Connected to the page')
     let linksList = []
 
     for (currentGame of gamesList) {
       if (!currentGame) continue
+      console.log('Loading links for ' + currentGame.game + '...')
+
       let url = currentGame.link
 
       await page.goto(url, { timeout: 0 })
@@ -80,6 +82,7 @@ module.exports = async options => {
     let tourneysList = []
 
     // processing every page
+    console.log('Processing each page...')
     for (link of linksList) {
       await page.goto(link, { timeout: 0 })
 
@@ -129,6 +132,8 @@ module.exports = async options => {
   }
 
   async function dataToTourneys(dataArray) {
+    console.log('Preparing tourneys...')
+
     // remove existing tourneys by link
     let existingTourneys = await Tourney.find({
       organisator: 'ESL',
@@ -171,7 +176,7 @@ module.exports = async options => {
 
       let prize, prizeInfo
       if (tourneyData.prize)
-        if (tourneyData.prize.length < 10 || /[0-9]/.test(tourneyData.prize)) {
+        if (tourneyData.prize.length < 10 && /[0-9]/.test(tourneyData.prize)) {
           prize = tourneyData.prize
         } else {
           prizeInfo = tourneyData.prize
@@ -199,26 +204,27 @@ module.exports = async options => {
         dateAdded: new Date(),
         link: link,
         block1: block1,
-        block2: prizeInfo || 'Информация отсутствует',
+        block2: prizeInfo || '<i>Информация отсутствует</i>',
         organisator: 'ESL',
         addedby: 'ESLBot',
         status: 0
       })
     }
 
-    let result
+    let result = 0
+
+    console.log('Loading to database')
 
     if (tourneysArray.length > 0)
-      result = await Tourney.collection
-        .insertMany(tourneysArray)
-        .catch(err => console.log('Bot error:', err))
+      result = await Tourney.insertMany(tourneysArray).catch(err =>
+        console.log('Bot error:', err)
+      )
 
-    let insertedCount = result ? result.insertedCount : 0
-    return { success: true, count: insertedCount }
+    if (result) return { success: true, count: tourneysArray.length }
+    if (result === 0) return { success: true, count: 0 }
+
+    return false
   }
 
   return await dataToTourneys(await loadTourneys(options))
-  // await loadTourneys(options)
 }
-
-module.exports({ game: 'Dota 2' })

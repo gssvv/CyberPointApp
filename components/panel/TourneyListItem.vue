@@ -96,9 +96,6 @@ export default {
             .catch(err => console.log(err))) || []
 
         this.$parent.tourneys[this.$vnode.key] = await update[0]
-        console.log(this.$parent.tourneys[this.$vnode.key].id)
-
-        console.log(this.$vnode.key)
 
         this.$parent.popup.active = await false
       }, 'You are going to HIDE tourney: ' + this.data.title)

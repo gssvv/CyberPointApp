@@ -126,6 +126,10 @@ export default {
         font-weight: 600
       ol, ul
         padding-left: 20px
+      i
+        font-style: normal
+        font-size: .8rem
+        opacity: .5
     .organisator-header
       padding: 15px 10px
       justify-content: center

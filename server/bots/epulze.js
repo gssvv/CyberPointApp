@@ -195,6 +195,10 @@ module.exports = async options => {
         link +
         "/rules' target='_blank' rel='noreferrer noopener'>сайте организатора</a></p>"
 
+      let block2 = tourneyData.prize
+        ? tourneyData.prize + ' стороне-победителю'
+        : null
+
       tourneysArray.push({
         id: id,
         title: tourneyData.title,
@@ -207,22 +211,24 @@ module.exports = async options => {
         dateAdded: new Date(),
         link: link,
         block1: block1,
-        block2: tourneyData.prize + ' стороне-победителю',
+        block2: block2 || '<i>Информация отсутствует</i>',
         organisator: 'Epulze',
         addedby: 'EpulzeBot',
         status: 0
       })
     }
 
-    let result
+    let result = 0
 
     if (tourneysArray.length > 0)
-      result = await Tourney.collection
-        .insertMany(tourneysArray)
-        .catch(err => console.log('Bot error:', err))
+      result = await Tourney.insertMany(tourneysArray).catch(err =>
+        console.log('Bot error:', err)
+      )
 
-    let insertedCount = result ? result.insertedCount : 0
-    return { success: true, count: insertedCount }
+    if (result) return { success: true, count: tourneysArray.length }
+    if (result === 0) return { success: true, count: 0 }
+
+    return false
   }
 
   return await dataToTourneys(await loadTourneys(options))

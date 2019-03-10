@@ -19,17 +19,16 @@ router.get('/all', auth, async (req, res) => {
   await Bot.updateMany({ active: true }, { lastUpdate: new Date() })
 
   let botFunction = []
-  let result = []
+  let count = 0
 
   for (let bot in bots) {
-    // load every bot
-    botFunction[bot] = require(`../bots/${bots[0].id}`)
-    // ...and run, saving to the result array
-    result.push(...(await botFunction[bot]()))
+    // run, saving to the result array
+    let result = await require(`../bots/${bots[bot].id}`)()
+    if (result) count += result.count
   }
 
-  console.log(`All bots have been run.`)
-  res.send(result)
+  console.log(`All bots have been run. ` + 'Added ' + count + ' tourneys.')
+  res.send('Added ' + count + ' tourneys.')
 })
 
 router.get('/list', auth, async (req, res) => {
@@ -71,9 +70,15 @@ router.post('/:bot', auth, async (req, res) => {
   let result = await botFunction({ game })
   // must save to database and return how many added
   console.log(`Bot has been run: ${bot.organisator} ${game}`)
+<<<<<<< HEAD
   if (result.success) return res.send(String(result.count))
 
   return res.status(400)
+=======
+  if (!result) res.status(400)
+
+  res.send(String(result.count))
+>>>>>>> bots-dev
 })
 
 module.exports = router

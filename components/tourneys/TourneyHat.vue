@@ -13,7 +13,7 @@
         </nuxt-link>
       </h1>
       <div class="attributes">
-        <div class="item" v-if="tourney.teamMode">{{ tourney.matchMode }}</div>
+        <div class="item" v-if="tourney.matchMode">{{ tourney.matchMode }}</div>
         <div class="item" v-if="tourney.teamMode">{{ tourney.teamMode }}</div>
         <div class="item">{{ (!tourney.price) ? ('Бесплатно') : (tourney.price + ' с игрока') }}</div>
       </div>
@@ -198,7 +198,7 @@ export default {
     .attributes
       display: grid
       grid-auto-flow: column
-      justify-content: space-around
+      justify-content: center
       margin-top: 5px  
       grid-gap: 15px
       .item

@@ -23,7 +23,7 @@ router.get('/all', auth, async (req, res) => {
 
   for (let bot in bots) {
     // load every bot
-    botFunction[bot] = require(`../bots/${bots[0].id}`)
+    botFunction[bot] = require(`../bots/${bots[bot].id}`)
     // ...and run, saving to the result array
     let result = await botFunction[bot]()
     if (result) count += result.count

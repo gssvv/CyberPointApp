@@ -199,6 +199,9 @@ module.exports = async options => {
         ? tourneyData.prize + ' стороне-победителю'
         : null
 
+      let prize =
+        tourneyData.prize.length < 10 && /[0-9]/.test ? tourneyData.prize : null
+
       tourneysArray.push({
         id: id,
         title: tourneyData.title,
@@ -206,7 +209,7 @@ module.exports = async options => {
         matchMode: matchMode,
         teamMode: teamMode,
         players: players,
-        prize: tourneyData.prize,
+        prize: prize,
         date: new Date(timeLeftToDate(tourneyData.date)),
         dateAdded: new Date(),
         link: link,

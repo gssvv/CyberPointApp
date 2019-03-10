@@ -22,14 +22,12 @@ router.get('/all', auth, async (req, res) => {
   let count = 0
 
   for (let bot in bots) {
-    // load every bot
-    botFunction[bot] = require(`../bots/${bots[bot].id}`)
-    // ...and run, saving to the result array
-    let result = await botFunction[bot]()
+    // run, saving to the result array
+    let result = await require(`../bots/${bots[bot].id}`)()
     if (result) count += result.count
   }
 
-  console.log(`All bots have been run.`)
+  console.log(`All bots have been run. ` + 'Added ' + count + ' tourneys.')
   res.send('Added ' + count + ' tourneys.')
 })
 

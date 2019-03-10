@@ -81,9 +81,26 @@ module.exports = async options => {
     // REMOVE EXISTING
     let tourneysList = []
 
+    // load existing
+    let existingTourneys = await Tourney.find({
+      organisator: 'ESL',
+      date: { $gt: new Date() }
+    })
+      .select({ link: 1 })
+      .limit(300)
+      .catch(err => console.log('Bot error:', err))
+
     // processing every page
     console.log('Processing each page...')
     for (link of linksList) {
+      //remove repeated
+
+      if (existingTourneys.filter(i => i.link == link)[0]) {
+        console.log('Already exists: ' + link)
+        continue
+      }
+      console.log('Parsing ' + link)
+
       await page.goto(link, { timeout: 0 })
 
       let tourneyObject = await page.evaluate(async () => {
@@ -134,15 +151,6 @@ module.exports = async options => {
   async function dataToTourneys(dataArray) {
     console.log('Preparing tourneys...')
 
-    // remove existing tourneys by link
-    let existingTourneys = await Tourney.find({
-      organisator: 'ESL',
-      date: { $gt: new Date() }
-    })
-      .select({ link: 1 })
-      .limit(300)
-      .catch(err => console.log('Bot error:', err))
-
     // last id
     let id = await Tourney.find()
       .select({ id: 1 })
@@ -155,12 +163,12 @@ module.exports = async options => {
 
     for (let tourneyData of dataArray) {
       let { link } = tourneyData
-      //remove repeated
-      if (existingTourneys.filter(i => i.link == link)[0]) continue
 
       // process date
       let date = tourneyData.date.match(/\d\d \w{3} \d{4} \d\d:\d\d/)[0]
-      date = new Date(DateTime.fromFormat(date, 'dd MMM yyyy HH:mm').ts)
+      date = new Date(
+        DateTime.fromFormat(date, 'dd MMM yyyy HH:mm', { zone: 0 }).ts
+      )
 
       // fuigure out the game
       let game

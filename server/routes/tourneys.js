@@ -390,7 +390,7 @@ router.post('/orgs', async (req, res) => {
   let game = req.body.game ? req.body.game : { $ne: '' }
 
   // get and set ID
-  let query = await Tourney.find({ status: 1, game })
+  let query = await Tourney.find({ status: 1, date: { $gt: new Date() }, game })
     .select({ organisator: 1 })
     .catch(err => res.status(400).send(err.message))
 

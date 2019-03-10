@@ -71,7 +71,9 @@ router.post('/:bot', auth, async (req, res) => {
   let result = await botFunction({ game })
   // must save to database and return how many added
   console.log(`Bot has been run: ${bot.organisator} ${game}`)
-  res.send(String(result.length))
+  if (result.success) return res.send(String(result.count))
+
+  return res.status(400)
 })
 
 module.exports = router

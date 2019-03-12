@@ -9,6 +9,7 @@ module.exports = async options => {
     const url = 'https://epulze.com/dota2/tournaments'
 
     const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
       // headless: false
     })
 
@@ -181,11 +182,13 @@ module.exports = async options => {
       if (existingTourneys.filter(i => i.link == link)[0]) continue
 
       id += 1
-      let teamMode = /\b\dv\d\b/i.exec(tourneyData.title)[0]
+
+      let modeFromTitle = /\b\dv\d\b/i.exec(tourneyData.title)
+      let teamMode = modeFromTitle ? modeFromTitle[0] : null
       let matchMode = teamMode
         ? tourneyData.mode.replace(/\b\dv\d\b/i, '').trim()
         : tourneyData.mode
-      let players = teamMode[0]
+      let players = teamMode ? teamMode[0] : null
       let block1 =
         '<p><strong>Сервер:</strong> Europe</p><p><strong>Режим:</strong> ' +
         matchMode +

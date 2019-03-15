@@ -184,11 +184,11 @@ module.exports = async options => {
       id += 1
 
       let modeFromTitle = /\b\dv\d\b/i.exec(tourneyData.title)
-      let teamMode = modeFromTitle ? modeFromTitle[0] : null
+      let teamMode = modeFromTitle ? modeFromTitle[0] : ''
       let matchMode = teamMode
         ? tourneyData.mode.replace(/\b\dv\d\b/i, '').trim()
         : tourneyData.mode
-      let players = teamMode ? teamMode[0] : null
+      let players = teamMode ? teamMode[0] : 0
       let block1 =
         '<p><strong>Сервер:</strong> Europe</p><p><strong>Режим:</strong> ' +
         matchMode +

@@ -70,6 +70,8 @@
       </div>
     </div>
 
+    <div class="run-all" @click="runEverything">Run all bots</div>
+
     <simple-popup :title="'Message'" :loading="popup.loading" v-if="popup.active">
       <h3 class="title" v-if="popup.title">{{ popup.title }}</h3>
       <p class="message" v-if="popup.message">{{ popup.message }}</p>
@@ -140,6 +142,17 @@ export default {
           .catch(err => console.log('Error occured.'))
       })
     },
+    runEverything(e) {
+      e.toElement.innerText = 'Query has been sent. Tourneys will appear soon.'
+      this.$axios
+        .get(`/api/bots/all`)
+        .then(res => {
+          e.toElement.innerText = res.data
+        })
+        .catch(err => {
+          e.toElement.innerText = 'Error occured.'
+        })
+    },
     stopAll(org, game) {
       this.popup.loading = false
       this.popup.active = true
@@ -193,6 +206,14 @@ export default {
 <style lang="sass" scoped>
 @import '@/assets/style/_variables.sass'
 
+.run-all 
+  width: 100%
+  font-size: .8rem
+  padding: 7.5px
+  text-transform: uppercase
+  opacity: .3
+  cursor: pointer
+
 .bots-wrapper
   display: flex !important
   flex-wrap: wrap
@@ -204,6 +225,7 @@ export default {
     margin-left: 7.5px
     .panel-header
       padding: 10px 15px
+      grid-gap: 15px
       .title
         text-transform: uppercase
         font-size: 1.4rem

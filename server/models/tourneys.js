@@ -25,13 +25,13 @@ const tourneySchema = new mongoose.Schema({
   },
   matchMode: {
     type: String,
-    minlength: 1,
+    minlength: 0,
     maxlength: 20,
     required: false
   },
   teamMode: {
     type: String,
-    minlength: 1,
+    minlength: 0,
     maxlength: 20,
     required: false
   },
@@ -129,11 +129,11 @@ exports.validate = function validateTourney(tourney) {
       .max(20)
       .required(),
     matchMode: Joi.string()
-      .min(1)
+      .min(0)
       .max(20)
       .empty(''),
     teamMode: Joi.string()
-      .min(1)
+      .min(0)
       .max(20)
       .empty(''),
     players: Joi.number()

@@ -54,7 +54,7 @@ router.post('/:bot', auth, async (req, res) => {
   )
     return res.status(400).send('Access denied.')
 
-  let game = req.body.game || null
+  let game = req.body.game || ''
 
   let bot = await Bot.findOneAndUpdate(
     { active: true, id: req.params.bot },

@@ -1,4 +1,4 @@
-const { DateTime, Info } = require('luxon')
+const { DateTime } = require('luxon')
 const { Tourney } = require('../models/tourneys')
 const puppeteer = require('puppeteer')
 const fs = require('fs')
@@ -43,7 +43,9 @@ module.exports = async options => {
       let url = currentGame.link
 
       await page.goto(url, { timeout: 0 })
-      await page.waitFor(1000)
+      await page.waitForSelector(
+        '.panel-pane.pane-league-list .league-list.cups'
+      )
 
       linksList.push(
         ...(await page.evaluate(async () => {
@@ -88,7 +90,7 @@ module.exports = async options => {
       date: { $gt: new Date() }
     })
       .select({ link: 1 })
-      .limit(300)
+      .limit(1000)
       .catch(err => console.log('Bot error:', err))
 
     // processing every page
@@ -103,6 +105,9 @@ module.exports = async options => {
       console.log('Parsing ' + link)
 
       await page.goto(link, { timeout: 0 })
+      await page.waitForSelector(
+        '#block-te-league-ui-league-header > div > league-header > div > div > div.league--header__information > h4'
+      )
 
       let tourneyObject = await page.evaluate(async () => {
         let title = await document.querySelector(
@@ -114,6 +119,7 @@ module.exports = async options => {
         )
         // leave only date in format '10 Mar 2019 16:00 MSK'
         if (date) date.innerText = date.innerText.match(/(\w*),\s(.*)/)[2]
+        if (!date) return false
 
         let mode = document.querySelector(
           `league-information div[ng-if="ctrl.league.mode !== null"]`
@@ -158,7 +164,7 @@ module.exports = async options => {
       .sort({ id: -1 })
       .limit(1)
       .catch(err => console.log('Bot error:', err))
-    id = id[0].id
+    id = id[0] ? id[0].id : 0
 
     let tourneysArray = []
 

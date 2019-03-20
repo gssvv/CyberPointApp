@@ -5,7 +5,7 @@ const fs = require('fs')
 module.exports = async options => {
   async function loadTourneys(options) {
     // because one less
-    const maxPages = 20 - 1
+    const maxPages = 40 - 1
     const url = 'https://epulze.com/dota2/tournaments'
 
     const browser = await puppeteer.launch({
@@ -22,6 +22,7 @@ module.exports = async options => {
 
     for (let i = 0; i <= maxPages; i++) {
       console.log('Scanning page', i + 1)
+      await page.waitForSelector('.content .tournament-item')
       // get height
       const bodyHandle = await page.$('body')
       const { height } = await bodyHandle.boundingBox()
@@ -55,7 +56,7 @@ module.exports = async options => {
               let link = await tourCode.querySelector('a').attributes[0].value
 
               let date = await tourCode.querySelector(
-                '.small-box.float-right.text-white span'
+                '.tournament-item-headline span'
               )
 
               let mode = await tourCode.querySelectorAll(
@@ -75,7 +76,8 @@ module.exports = async options => {
               )[2].innerHTML
 
               if (date) {
-                date = date.innerHTML
+                date.removeChild(date.querySelector('span'))
+                date = date.innerText
               } else {
                 continue
               }
@@ -115,7 +117,6 @@ module.exports = async options => {
 
       console.log('Loading next page...')
       await page.click('.pagination li:nth-child(' + (length - 1) + ')')
-      await page.waitFor(1000)
     }
 
     await browser.close()
@@ -132,12 +133,13 @@ module.exports = async options => {
       timeLeft[index] = item.slice(0, -1)
     })
 
-    if (timeLeft[3]) then.setDate(now.getDate() + timeLeft[3] * 1)
-    if (timeLeft[2]) then.setHours(now.getHours() + timeLeft[2] * 1)
-    if (timeLeft[1]) then.setMinutes(now.getMinutes() + timeLeft[1] * 1)
-    if (timeLeft[0]) then.setSeconds(now.getSeconds() + timeLeft[0] * 1)
+    if (timeLeft[2]) then.setDate(now.getDate() + timeLeft[2] * 1)
+    if (timeLeft[1]) then.setHours(now.getHours() + timeLeft[1] * 1)
+    if (timeLeft[0]) then.setMinutes(now.getMinutes() + timeLeft[0] * 1)
+    // if (timeLeft[0]) then.setSeconds(now.getSeconds() + timeLeft[0] * 1)
     // correct date (sometimes returns 59s instead of 00)
-    if (then.getSeconds() == 59) then.setSeconds(then.getSeconds() + 1)
+    if ([14, 29, 44, 59].includes(then.getMinutes()))
+      then.setMinutes(then.getMinutes() + 1)
 
     let yyyy = then.getFullYear()
     let mm =
@@ -146,10 +148,10 @@ module.exports = async options => {
     let hh = then.getHours() < 10 ? '0' + then.getHours() : then.getHours()
     let min =
       then.getMinutes() < 10 ? '0' + then.getMinutes() : then.getMinutes()
-    let ss =
-      then.getSeconds() < 10 ? '0' + then.getSeconds() : then.getSeconds()
+    // let ss =
+    //   then.getSeconds() < 10 ? '0' + then.getSeconds() : then.getSeconds()
 
-    let result = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + min + ':' + ss
+    let result = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + min + ':00' //ss
 
     return result
   }
@@ -162,7 +164,7 @@ module.exports = async options => {
       game: 'Dota 2'
     })
       .select({ link: 1 })
-      .limit(150)
+      .limit(1000)
       .catch(err => console.log('Bot error:', err))
 
     // last id
@@ -171,7 +173,7 @@ module.exports = async options => {
       .sort({ id: -1 })
       .limit(1)
       .catch(err => console.log('Bot error:', err))
-    id = id[0].id
+    id = id[0] ? id[0].id : 0
 
     let tourneysArray = []
 
@@ -180,6 +182,10 @@ module.exports = async options => {
 
       // remove repeated
       if (existingTourneys.filter(i => i.link == link)[0]) continue
+
+      let date = new Date(timeLeftToDate(tourneyData.date))
+      date = date - date.getTimezoneOffset() * 60 * 1000
+      if (date < new Date()) continue
 
       id += 1
 
@@ -213,7 +219,7 @@ module.exports = async options => {
         teamMode: teamMode,
         players: players,
         prize: prize,
-        date: new Date(timeLeftToDate(tourneyData.date)),
+        date: date,
         dateAdded: new Date(),
         link: link,
         block1: block1,

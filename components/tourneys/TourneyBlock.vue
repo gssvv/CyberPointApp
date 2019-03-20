@@ -54,6 +54,8 @@ export default {
   mounted() {},
   methods: {
     getCalendar(date) {
+      date = moment(date).toDate() - moment(date).utcOffset() * 60 * 1000
+
       return moment(date).calendar()
     },
     async goToTourney(id) {

@@ -62,6 +62,7 @@
 <script>
 import { mapState } from 'vuex'
 import Cookies from 'js-cookie'
+import { DateTime } from 'luxon'
 
 export default {
   props: {
@@ -117,7 +118,11 @@ export default {
       if (!this.tourney.date) return
       this.timer.stop = false
 
-      let diff = (new Date(this.tourney.date) - new Date()) / 1000
+      let diff =
+        (new Date(this.tourney.date) -
+          new Date() -
+          DateTime.local().offset * 60 * 1000) /
+        1000
 
       if (diff < 0) return (this.timer.stop = true)
       this.updateTimer(diff)

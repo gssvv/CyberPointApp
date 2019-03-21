@@ -43,9 +43,15 @@ module.exports = async options => {
       let url = currentGame.link
 
       await page.goto(url, { timeout: 0 })
-      await page.waitForSelector(
-        '.panel-pane.pane-league-list .league-list.cups'
-      )
+      try {
+        await page.waitForSelector(
+          '.panel-pane.pane-league-list .league-list.cups'
+        )
+      } catch (err) {
+        console.log('Timeout. Skipping ', url)
+
+        continue
+      }
 
       linksList.push(
         ...(await page.evaluate(async () => {

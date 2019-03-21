@@ -157,6 +157,7 @@ module.exports = async options => {
 
   async function dataToTourneys(dataArray) {
     console.log('Preparing tourneys...')
+    if (dataArray.length == 0) return { success: true, count: 0 }
 
     // last id
     let id = await Tourney.find()

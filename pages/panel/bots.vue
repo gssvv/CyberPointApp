@@ -70,7 +70,9 @@
       </div>
     </div>
 
-    <div class="run-all" @click="runEverything">Run all bots</div>
+    <div class="run-all-wrapper">
+      <div class="run-all" @click="runEverything">Run all bots</div>
+    </div>
 
     <simple-popup :title="'Message'" :loading="popup.loading" v-if="popup.active">
       <h3 class="title" v-if="popup.title">{{ popup.title }}</h3>
@@ -206,13 +208,15 @@ export default {
 <style lang="sass" scoped>
 @import '@/assets/style/_variables.sass'
 
-.run-all 
+.run-all-wrapper
   width: 100%
   font-size: .8rem
   padding: 7.5px
   text-transform: uppercase
   opacity: .3
-  cursor: pointer
+  .run-all
+    display: inline-block
+    cursor: pointer
 
 .bots-wrapper
   display: flex !important

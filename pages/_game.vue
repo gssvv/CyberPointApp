@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tourney-page-wrapper">
     <!-- set game for banner -->
     <tourneys-banner :gameInfo="gameInfo"/>
     <tourneys-filters
@@ -164,6 +164,9 @@ export default {
 <style lang="sass" scoped>
 @import '@/assets/style/_variables.sass'
 
+.tourney-page-wrapper
+  min-height: 100vh
+  
 .loading-tourneys
   width: 100%
   display: grid

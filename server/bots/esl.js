@@ -45,7 +45,7 @@ module.exports = async options => {
       await page.goto(url, { timeout: 0 })
       try {
         await page.waitForSelector(
-          '.panel-pane.pane-league-list .league-list.cups'
+          '.panel-pane.pane-league-list .league-list.cups a'
         )
       } catch (err) {
         console.log('Timeout. Skipping ', url)

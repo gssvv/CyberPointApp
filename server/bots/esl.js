@@ -242,5 +242,13 @@ module.exports = async options => {
     return false
   }
 
-  return await dataToTourneys(await loadTourneys(options))
+  return await dataToTourneys(
+    await loadTourneys(options).catch(err => {
+      console.log('Error occured loading tourneys: ', err, 'Keep going...')
+      return undefined
+    })
+  ).catch(err => {
+    console.log('Error occured processing data: ', err, 'Keep going...')
+    return { success: false, count: 0 }
+  })
 }

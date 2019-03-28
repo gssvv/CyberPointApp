@@ -239,7 +239,6 @@ export default {
       h1
         font-size: 1.8rem  
       .attributes 
-        justify-content: space-between
         margin-top: 10px 
         .item
           font-size: 1rem  

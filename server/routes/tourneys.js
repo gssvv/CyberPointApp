@@ -12,10 +12,6 @@ router.post('/list', async (req, res) => {
   let params = {}
 
   if (req.body.params) {
-    if (req.body.params.free) {
-      // free
-      params.price = ''
-    }
     if (req.body.params.organisator) {
       // organisator
       if (req.body.params.organisator.not) {
@@ -28,6 +24,10 @@ router.post('/list', async (req, res) => {
     }
     params.$or = []
     params.$and = []
+    if (req.body.params.free) {
+      // free
+      params.$or.push(...[{ price: null }, { price: '' }])
+    }
     if (req.body.params.v1) {
       params.$or.push({ teamMode: '1v1' })
     }

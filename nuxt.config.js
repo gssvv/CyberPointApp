@@ -72,7 +72,8 @@ module.exports = {
   ],
   modules: ['@nuxtjs/axios', '@nuxtjs/pwa'],
   axios: {
-    baseURL: process.env.BASE_URL || 'http://localhost:3000'
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    https: process.env.NODE_ENV == 'production' ? true : false
   },
 
   build: {

@@ -74,7 +74,7 @@ class ESLBot {
       )
       console.log('Successfully inserted:', result[0].id)
       this.report.added++
-    } catch {
+    } catch (e) {
       console.log(`Error inserting tourney ${tourney.id}`)
       this.report.failed++
     }
@@ -178,7 +178,7 @@ class ESLBot {
               this.handlers
             )
         }
-      } catch {
+      } catch (e) {
         console.log('Error on tourney ' + link)
         this.report.failed++
         continue

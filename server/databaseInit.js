@@ -5,7 +5,7 @@ const settings =
     ? {
         useNewUrlParser: true,
         user: 'Cybpoint',
-        pass: process.env.DB_PASS || 'ad',
+        pass: process.env.DB_PASS || undefined,
         auth: {
           authSource: 'admin'
         }

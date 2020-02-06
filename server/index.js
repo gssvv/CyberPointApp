@@ -1,10 +1,13 @@
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = require('./app')
+require('dotenv').config()
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
+
+console.log(process.env.PORT)
 
 async function start() {
   // Init Nuxt.js

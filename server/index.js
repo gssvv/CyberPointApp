@@ -1,26 +1,6 @@
-const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const app = express()
-const tourneys = require('./routes/tourneys')
-const users = require('./routes/users')
-const bots = require('./routes/bots')
-const games = require('./routes/games')
-
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-)
-app.use(cookieParser())
-
-app.use('/api/tourneys', tourneys)
-app.use('/api/users', users)
-app.use('/api/bots', bots)
-app.use('/api/games', games)
+const app = require('./app')
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')

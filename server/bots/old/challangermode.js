@@ -1,5 +1,5 @@
 const { DateTime } = require('luxon')
-const { Tourney } = require('../models/tourneys')
+const { Tourney } = require('../../models/tourneys')
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 

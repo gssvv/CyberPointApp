@@ -4,7 +4,7 @@
       <div class="l-content">
         <div class="wrapper">
           <nuxt-link class="logo" to="/">
-            <img src="/logo.png" alt="Киберспортивные турниры">
+            <img src="/logo.png" alt="Киберспортивные турниры" />
           </nuxt-link>
           <div class="menu" v-click-outside="hideMenu">
             <ul ref="menu">

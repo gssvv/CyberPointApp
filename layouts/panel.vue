@@ -24,12 +24,12 @@
               </a>
             </nuxt-link>
 
-            <nuxt-link tag="li" to="/panel/bots" active-class="active">
+            <!-- <nuxt-link tag="li" to="/panel/bots" active-class="active">
               <a>
                 <i class="fas fa-robot icon"></i>
                 <span>Bots</span>
               </a>
-            </nuxt-link>
+            </nuxt-link> -->
 
             <nuxt-link tag="li" to="/panel/users" active-class="active">
               <a>
@@ -45,6 +45,9 @@
               </a>
             </nuxt-link>
           </ul>
+          <nuxt-link to="/" class="back-btn">
+            Back to website
+          </nuxt-link>
         </div>
       </div>
       <div class="l-panel-content">
@@ -82,6 +85,16 @@ export default {
 
 <style lang="sass">
 @import '@/assets/style/_variables.sass'
+
+.back-btn
+  text-transform: uppercase
+  font-weight: 300
+  margin-left: 12px
+  font-size: 13px
+  margin-top: 20px
+  text-decoration: none
+  display: block
+  color: $paleBlue
 
 .l-panel-wrapper
   overflow-y: hidden

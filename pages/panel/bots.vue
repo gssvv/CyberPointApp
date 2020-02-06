@@ -103,6 +103,7 @@ export default {
     }
   },
   created() {
+    return this.$router.push('/panel')
     this.$axios
       .get('/api/bots/list')
       .then(res => {

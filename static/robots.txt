@@ -1,0 +1,5 @@
+Host: cybpoint.ru
+Sitemap: https://cybpoint.ru/sitemap.xml
+User-agent: *
+
+Disallow: /panel

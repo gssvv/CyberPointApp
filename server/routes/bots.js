@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('../databaseInit')
-const env = require('../../nuxt.config.js').env
 const auth = require('../middleware/auth')
 const { Bot } = require('../models/bots')
 

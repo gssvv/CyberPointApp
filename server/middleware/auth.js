@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken')
 const env = require('../../nuxt.config.js').env
 const { User } = require('../models/users')
 
+console.log(env)
+
 module.exports = async function(req, res, next) {
   const token = req.cookies.auth_token
   if (!token)

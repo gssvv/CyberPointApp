@@ -40,12 +40,14 @@
     "nuxt-sass-resources-loader": "^2.0.5",
     "puppeteer": "^1.13.0",
     "sass-loader": "^7.1.0",
+    "sitemap": "^5.1.0",
     "tiptap": "^1.12.0",
     "tiptap-extensions": "^1.12.1",
     "v-tooltip": "^2.0.0-rc.33",
     "vue-datetime": "^1.0.0-beta.10",
     "vuejs-countdown": "^0.2.1",
-    "weekstart": "^1.0.0"
+    "weekstart": "^1.0.0",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",

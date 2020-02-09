@@ -1,5 +1,4 @@
 const Joi = require('joi')
-const env = require('../../nuxt.config.js').env
 const mongoose = require('../databaseInit')
 const _ = require('lodash')
 

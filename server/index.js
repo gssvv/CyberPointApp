@@ -8,6 +8,7 @@ let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 
 console.log(process.env.PORT)
+console.log(process.env.NODE_ENV)
 
 async function start() {
   // Init Nuxt.js

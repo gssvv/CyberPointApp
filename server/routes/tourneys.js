@@ -29,13 +29,17 @@ router.post('/list', async (req, res) => {
       params.$or.push(...[{ price: null }, { price: '' }])
     }
     if (req.body.params.v1) {
-      params.$or.push({ teamMode: '1v1' })
+      params.$or.push({ teamMode: { $regex: /(1v1)/, $options: 'i' } })
     }
     if (req.body.params.v5) {
-      if (req.body.params.v5) {
-        params.$or.push({ teamMode: '5v5' })
+      if (req.body.params.v1) {
+        params.$or.push({
+          teamMode: { $regex: /(5v5)|(CAPTAINS)/, $options: 'i' }
+        })
       } else {
-        params.$and.push({ teamMode: '5v5' })
+        params.$and.push({
+          teamMode: { $regex: /(5v5)|(CAPTAINS)/, $options: 'i' }
+        })
       }
     }
     if (req.body.params.fpp) {

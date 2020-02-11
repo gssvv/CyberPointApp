@@ -19,7 +19,7 @@ let months = {
   дек: 'Dec'
 }
 
-class ESLBot {
+class Bot {
   constructor(options = {}) {
     this.validate(options)
 
@@ -34,11 +34,11 @@ class ESLBot {
     this.report = { botName: this.botName, added: 0, failed: 0 }
   }
 
-  async start() {
+  async start(headless = true) {
     console.log(`Starting ${this.botName}`)
 
     try {
-      await this.openBrowser()
+      await this.openBrowser(headless)
       await this.getLinks()
       await this.excludeExistingTourneys()
       await this.parseTourneysUsingLinks()
@@ -67,8 +67,8 @@ class ESLBot {
   }
 
   async insertSingleTourney(tourney) {
+    tourney.id = (await this.getLastTourneyId()) + 1
     try {
-      tourney.id = (await this.getLastTourneyId()) + 1
       const result = await Tourney.insertMany(tourney).catch(err =>
         console.log('Error inserting tourney:', err.message)
       )
@@ -107,9 +107,6 @@ class ESLBot {
    */
   async getLinks() {
     const page = await this.browser.newPage()
-
-    // TODO: add pagination (for epulze)
-    // gonna add links as usual
 
     for (let inputPage of this.inputPages) {
       console.log(`Parsing ${inputPage.name} tourneys...`)
@@ -184,7 +181,6 @@ class ESLBot {
         continue
       }
 
-      // TO UNCOMMENT
       await this.insertSingleTourney(tourney)
       // this.tourneysParsed.push(tourney)
     }
@@ -198,7 +194,7 @@ class ESLBot {
   async excludeExistingTourneys() {
     let linksInitially = this.links.length
     let existingTourneys = await Tourney.find({
-      organisator: 'ESL',
+      organisator: this.organisator,
       date: { $gt: new Date() }
     })
       .select({ link: 1 })
@@ -238,4 +234,4 @@ class ESLBot {
   }
 }
 
-module.exports = ESLBot
+module.exports = Bot

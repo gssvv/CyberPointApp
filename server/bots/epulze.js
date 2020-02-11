@@ -21,9 +21,9 @@ class EpulzeBot extends Bot {
 
     await page.close()
   }
-  async start() {
+  async start(headless = true) {
     try {
-      await this.openBrowser()
+      await this.openBrowser(headless)
       await this.getInputPages()
       await this.getLinks()
       await this.excludeExistingTourneys()
@@ -165,7 +165,6 @@ const handlers = {
         : '<i>Информация отсутствует</i>'
   }
 }
-
 module.exports = new EpulzeBot({
   selectorToWaitOnPage,
   inputPages,

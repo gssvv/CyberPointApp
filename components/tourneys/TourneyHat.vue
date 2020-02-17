@@ -20,7 +20,7 @@
       <div class="price-and-reg">
         <div class="price" v-if="tourney.prize" v-tooltip.top-end="'Суммарно'">
           <span class="num">{{ tourney.prize }}</span>
-          <span class="label">Призовой фонд</span>
+          <span class="label">Награда</span>
         </div>
         <a
           v-if="tourney.link"
@@ -222,8 +222,9 @@ export default {
           text-align: center
           &.label
             font-size: .8rem
-            font-weight: 100
+            font-weight: 400
             text-transform: uppercase
+            opacity: .7
         @include respond-to(sm)
           font-size: 2.4rem
           span

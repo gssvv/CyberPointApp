@@ -23,6 +23,7 @@ class Bot {
   constructor(options = {}) {
     this.validate(options)
 
+    this.debugMode = options.debugMode
     this.inputPages = options.inputPages
     this.linksParser = options.linksParser
     this.selectorToWaitOnPage = options.selectorToWaitOnPage
@@ -67,6 +68,8 @@ class Bot {
   }
 
   async insertSingleTourney(tourney) {
+    if (this.debugMode) console.log('Inserting...', tourney)
+
     tourney.id = (await this.getLastTourneyId()) + 1
     try {
       const result = await Tourney.insertMany(tourney).catch(err =>
@@ -161,6 +164,8 @@ class Bot {
 
       try {
         for (let field in this.handlers) {
+          if (this.debugMode) console.log(`Parsing field: ${field}`)
+
           if (this.handlers[field].selector) {
             tourney[field] = await page.$$eval(
               this.handlers[field].selector,
@@ -177,6 +182,8 @@ class Bot {
         }
       } catch (e) {
         console.log('Error on tourney ' + link)
+        if (this.debugMode) console.log(e)
+
         this.report.failed++
         continue
       }

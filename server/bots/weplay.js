@@ -167,4 +167,4 @@ module.exports = new EpulzeBot({
   debugMode: true // false
 })
 
-module.exports.start(false)
+// module.exports.start(false)

@@ -47,6 +47,7 @@ class Bot {
       console.log(`Error on start(): ${e.message}`)
       this.report.message = 'Error occured'
     }
+    this.browser.close()
     return this.report
   }
 

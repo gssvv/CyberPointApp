@@ -8,25 +8,30 @@ class EpulzeBot extends Bot {
     const page = await this.browser.newPage()
     let newPages = []
 
-    for (let inputPage of inputPages) {
-      await page.goto(inputPage.link)
-      await page.waitForSelector('.PaginationInput--item__3U:last-child')
-      await page.click('.PaginationInput--item__3U:last-child')
-      let game = inputPage.name.match(/(.*) –/)[1]
-      let match = page.url().match(/page-offset=(\d*)/)
-      let totalPages = Number(match && match[1]) / 10 + 1
+    try {
+      for (let inputPage of inputPages) {
+        await page.goto(inputPage.link)
+        await page.waitForSelector('.PaginationInput--item__3U:last-child', {
+          timeout: 5000
+        })
+        await page.click('.PaginationInput--item__3U:last-child')
+        let game = inputPage.name.match(/(.*) –/)[1]
+        let match = page.url().match(/page-offset=(\d*)/)
+        let totalPages = Number(match && match[1]) / 10 + 1
 
-      if (totalPages || totalPages < 2)
-        for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
-          let offset = pageNum * 10 - 10
+        if (totalPages || totalPages < 2)
+          for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
+            let offset = pageNum * 10 - 10
 
-          newPages.push({
-            name: `${game} – (${offset}-${offset + 10})`,
-            link: `${inputPage.link}?page-offset=${offset}`
-          })
-        }
+            newPages.push({
+              name: `${game} – (${offset}-${offset + 10})`,
+              link: `${inputPage.link}?page-offset=${offset}`
+            })
+          }
+      }
+    } catch (e) {
+      console.log(e.message)
     }
-
     this.inputPages.push(...newPages)
     console.log(this.inputPages)
 
@@ -43,6 +48,7 @@ class EpulzeBot extends Bot {
       console.log(`Error on start(): ${e.message}`)
       this.report.message = 'Error occured'
     }
+    this.browser.close()
     return this.report
   }
 }
@@ -96,7 +102,15 @@ const handlers = {
   },
   game: {
     serverFormatter: (field, { title }) => {
-      return title.match(/(Dota 2)|(CS:GO)/i)[0]
+      let match = title.match(/(Dota 2)|(CS:GO)/i)
+      let result = ''
+      if (!match) {
+        result = title.match(/(Captаins)/i) ? 'Dota 2' : null
+      } else {
+        result = match[0]
+      }
+
+      return result
     }
   },
   teamMode: {
@@ -150,7 +164,7 @@ module.exports = new EpulzeBot({
   handlers,
   organisator: 'Weplay',
   botName: 'WeplayBot',
-  debugMode: false // false
+  debugMode: true // false
 })
 
-// module.exports.start(false)
+module.exports.start(false)

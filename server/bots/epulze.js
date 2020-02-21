@@ -3,23 +3,27 @@ const Bot = require('./Bot')
 
 class EpulzeBot extends Bot {
   async getInputPages() {
-    const page = await this.browser.newPage()
-    await page.goto(this.inputPages[0].link)
-    await page.waitForSelector('.main-container ul li.pagination-last')
-    await page.click('.main-container ul li.pagination-last')
-    let match = page.url().match(/page=(\d*)/)
-    let totalPages = Number(match && match[1])
+    try {
+      const page = await this.browser.newPage()
+      await page.goto(this.inputPages[0].link)
+      await page.waitForSelector('.main-container ul li.pagination-last')
+      await page.click('.main-container ul li.pagination-last')
+      let match = page.url().match(/page=(\d*)/)
+      let totalPages = Number(match && match[1])
 
-    if (totalPages || totalPages < 2)
-      for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-        let pageId = pageNum + 1
-        this.inputPages.push({
-          name: `Dota 2 – ${pageId}`,
-          link: `https://epulze.com/dota2/tournaments?page=${pageId}`
-        })
-      }
+      if (totalPages || totalPages < 2)
+        for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+          let pageId = pageNum + 1
+          this.inputPages.push({
+            name: `Dota 2 – ${pageId}`,
+            link: `https://epulze.com/dota2/tournaments?page=${pageId}`
+          })
+        }
 
-    await page.close()
+      await page.close()
+    } catch (e) {
+      console.log(e.message)
+    }
   }
   async start(headless = true) {
     try {
@@ -32,6 +36,7 @@ class EpulzeBot extends Bot {
       console.log(`Error on start(): ${e.message}`)
       this.report.message = 'Error occured'
     }
+    this.browser.close()
     return this.report
   }
 

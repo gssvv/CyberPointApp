@@ -2,6 +2,7 @@ const schedule = require('node-schedule')
 const EpulzeBot = require('./epulze')
 const EslBot = require('./esl')
 const WeplayBot = require('./weplay')
+const ChallangermodeBot = require('./challangermode')
 const dayjs = require('dayjs')
 require('colors')
 
@@ -18,6 +19,7 @@ module.exports = schedule.scheduleJob('0 0 0,6,12,18 * * *', async fireDate => {
 
   reports.push(await EslBot.start())
   reports.push(await WeplayBot.start())
+  reports.push(await ChallangermodeBot.start())
   reports.push(await EpulzeBot.start())
 
   let nowDate = dayjs()

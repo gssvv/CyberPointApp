@@ -115,6 +115,7 @@ class Bot {
     for (let inputPage of this.inputPages) {
       console.log(`Parsing ${inputPage.name} tourneys...`)
       await page.goto(inputPage.link)
+      await this.beforeSearchingLinkSelector(page)
 
       try {
         await page.waitForSelector(this.linksParser.linkSelector)
@@ -129,6 +130,8 @@ class Bot {
         this.linksParser.linkSelector,
         this.linksParser.handler
       )
+
+      if (this.debugMode) console.log('PageLinksList:', pageLinksList)
 
       pageLinksList = pageLinksList.filter(val => !!val)
       console.log(`${pageLinksList.length} links loaded for ${inputPage.name}`)
@@ -180,6 +183,9 @@ class Bot {
               tourney,
               this.handlers
             )
+
+          if (this.debugMode)
+            console.log(`For field [${field}] value set to [${tourney[field]}]`)
         }
       } catch (e) {
         console.log('Error on tourney ' + link)
@@ -188,8 +194,10 @@ class Bot {
         this.report.failed++
         continue
       }
-
+      // to add
       await this.insertSingleTourney(tourney)
+
+      // if you ever want to add everything at once
       // this.tourneysParsed.push(tourney)
     }
 
@@ -234,6 +242,12 @@ class Bot {
     return id
   }
 
+  /**
+   * Triggered before searching for links
+   */
+  async beforeSearchingLinkSelector(page) {
+    return null
+  }
   /**
    * Triggered before parsing links on input pages
    */

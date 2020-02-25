@@ -1,6 +1,6 @@
 const dayjs = require('dayjs')
 const Bot = require('./Bot')
-let customParseFormat = require('dayjs/plugin/customParseFormat')
+const customParseFormat = require('dayjs/plugin/customParseFormat')
 dayjs.extend(customParseFormat)
 
 class EpulzeBot extends Bot {
@@ -163,8 +163,8 @@ module.exports = new EpulzeBot({
   linksParser,
   handlers,
   organisator: 'Weplay',
-  botName: 'WeplayBot',
-  debugMode: true // false
+  botName: 'WeplayBot'
+  // debugMode: true
 })
 
 // module.exports.start(false)

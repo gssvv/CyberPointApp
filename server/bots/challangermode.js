@@ -91,9 +91,9 @@ let linksParser = {
       let subsOnly = link.innerText.match(/Subscribers Only/i)
       let inviteOnly = link.innerText.match(/Invite Only/i)
       let payToEnter = link.innerText.match(/pay-to-enter/i)
-      let isOpen = link.parentElement
-        .querySelector('.badge.turquoise')
-        .innerText.match(/open/i)
+      let badge = link.parentElement.querySelector('.badge')
+
+      let isOpen = badge && badge.innerText.match(/open/i)
 
       if (!subsOnly && isOpen && !inviteOnly && !payToEnter)
         return `https://www.challengermode.com${link.attributes.href.value}`

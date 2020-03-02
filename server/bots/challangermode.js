@@ -68,14 +68,14 @@ class ChallangermodeBot extends Bot {
 }
 
 let inputPages = [
-  {
-    name: 'Dota 2',
-    link: 'https://www.challengermode.com/dota2/tournaments'
-  },
-  {
-    name: 'CS:GO',
-    link: 'https://www.challengermode.com/csgo/tournaments'
-  },
+  // {
+  //   name: 'Dota 2',
+  //   link: 'https://www.challengermode.com/dota2/tournaments'
+  // },
+  // {
+  //   name: 'CS:GO',
+  //   link: 'https://www.challengermode.com/csgo/tournaments'
+  // },
   {
     name: 'PUBG',
     link: 'https://www.challengermode.com/pubg/tournaments'
@@ -148,7 +148,7 @@ const handlers = {
   date: {
     selector: dateSelector,
     browserFormatter: val => val[0].innerText.replace('\n', ' '),
-    serverFormatter: val => dayjs(val, 'HH:mm MMM DD').$d
+    serverFormatter: val => dayjs(val, 'HH:mm MMM D').$d
   },
   dateAdded: { serverFormatter: () => new Date() },
   // price: {},

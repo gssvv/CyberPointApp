@@ -1,35 +1,35 @@
 <template>
-  <div class="m-tourney-item m-universal-block">
-    <div class="tourney-header ub-dark-top">
-      <div class="logo">
+  <div class="m-tourney-item" @click="goToTourney(tourney.id)">
+    <div class="m-tourney-item__logo">
         <img
           :src="`/organisators/${tourney.organisator.toLowerCase()}.png`"
           :alt="`Турниры от ${tourney.organisator}`"
         >
       </div>
-      <div class="short-info">
-        <h4 class="game">{{ tourney.game }}</h4>
-        <p class="t-mode">{{ tourney.teamMode }}</p>
-        <p class="g-mode">{{ tourney.matchMode }}</p>
-        <!-- <p class="players">
-          <i class="fas fa-user" v-for="i in tourney.players" :key="i"></i>
-        </p>-->
-        <p class="date">{{ getCalendar(tourney.date) }}</p>
+      <div class="m-tourney-item__block title">
+        <div class="block__title date" v-text="getCalendar(tourney.date)" />
+        <div class="block__content" v-text="tourney.title" />
       </div>
-    </div>
-    <div class="tourney-content ub-content">
-      <h3 class="title">{{ tourney.title }}</h3>
-      <p
-        class="charge"
-      >{{ (!tourney.price) ? ('Бесплатное участие') : (tourney.price + ' от игрока') }}</p>
 
-      <div class="low-row">
-        <p class="reward">{{ tourney.prize }}</p>
-        <a @click="goToTourney(tourney.id)" class="button">
-          <span>Подробнее</span>
-        </a>
+      <div class="m-tourney-item__block" v-if="tourney.prize">
+        <div class="block__title">Призовой фонд</div>
+        <div class="block__content" v-text="tourney.prize" />
       </div>
-    </div>
+
+      <div class="m-tourney-item__block" v-if="tourney.price">
+        <div class="block__title">Взнос</div>
+        <div class="block__content" v-text="tourney.price" />
+      </div>
+
+      <div class="m-tourney-item__block" v-if="tourney.teamMode">
+        <div class="block__title">Режим</div>
+        <div class="block__content" v-text="tourney.teamMode" />
+      </div>
+
+      <div class="m-tourney-item__link">
+        <span class="link-text">Подробнее</span>
+        <span class="fas fa-chevron-right"></span>
+      </div>
   </div>
 </template>
 
@@ -67,83 +67,111 @@ export default {
 }
 </script>
 
+
 <style lang="sass" scoped>
 @import '@/assets/style/_variables.sass'
 
 .m-tourney-item
+  @include shadow(2)
   position: relative
-  display: grid
-  .tourney-header
-    position: relative
+  display: flex
+  flex-wrap: wrap
+  background-color: $darkBlue2
+  border-radius: 2px
+  padding: 16px 56px 24px 136px
+  min-height: 120px
+  cursor: pointer
+  transition: .35s ease
+  justify-content: flex-start
+  position: relative
+  &__logo
+    width: 88px
+    height: 88px
     display: grid
-    grid-template-columns: 45% 55%
-    align-items: center
-    .logo
-      display: grid
-      justify-content: center
+    justify-content: center
+    background-size: contain
+    background-position: center center
+    background-repeat: no-repeat
+    margin-right: 24px
+    position: absolute
+    left: 24px
+    img
       width: 100%
-      background-size: contain
-      background-position: center center
-      background-repeat: no-repeat
-      padding: 0 10px
-      img
-        width: 100%
-    .short-info
-      text-align: center
-      color: $lightBlue
-      p
-        margin: 0
-      .t-mode
-        font-size: 2rem
-        margin: 0
-        line-height: 1
+      height: 100%
+      object-fit: contain
+      object-position: center center
+  &__block
+    margin-top: 18px
+    margin-right: 40px
+    &.title
+      width: 380px
+    .block
+      &__title
+        font-size: 14px
+        margin-bottom: 4px
+        color: $lightBlue
+        &.date 
+          font-size: 16px
+          color: $paleBlue
+      &__content
         color: #fff
-        text-transform: uppercase
-        font-weight: 600
-        transform: translateX(-2px)
-      .game
-        font-weight: 400
-        margin: 0
-        font-size: 1rem
-        text-transform: uppercase
-      .g-mode
-        font-size: .9rem
-        text-transform: uppercase
-        font-weight: 400
-      .players
-        font-size: .9rem
-        margin-top: 5px
-        letter-spacing: 2px
-        font-weight: 400
-      .date
-        font-size: 1.2rem
-        margin-top: 5px
-        font-weight: 400
-  .tourney-content
+        font-weight: bold
+        font-size: 22px
+        max-width: 380px
+  &__link
     display: grid
-    .low-row
-      display: grid
-      justify-content: space-between
-      grid-auto-flow: column
-      align-items: center 
-    .title
-      font-size: 1.8rem
-      font-weight: 400
-      margin: 0
-      line-height: 1
-    .charge
-      margin: 0
-      font-size: 1rem
-      font-weight: 400
-      color: $paleBlue
-    .reward
-      margin-top: 10px
-      font-weight: 400
-      font-size: 2.2rem
-      margin-bottom: 0
-    .button
-      justify-self: flex-start
-    @include respond-to(xl)
-      .title
-        font-size: 1.6rem
+    align-items: center
+    justify-content: center 
+    opacity: .25
+    transition: .35s ease
+    position: absolute
+    top: 0
+    right: 32px
+    height: 100%
+    .link-text
+      display: none
+  &:hover
+    @include shadow(3)
+    .m-tourney-item__link
+      opacity: 1
+
+  @include respond-to(md)
+    &__logo
+      top: 32px
+    &__block
+      &.title 
+        width: 100%
+
+  @include respond-to(sm)
+    padding: 26px 20px 4px 20px
+    &__block
+      margin: 0 32px 20px 0
+      &.title
+        padding-left: 100px
+        margin-right: 0
+        min-height: 74px
+      .block
+        &__title
+          &.date
+            font-size: 14px
+        &__content
+          font-size: 18px
+    &__logo
+      top: 20px
+      width: 80px
+      left: 20px
+      height: 80px
+    &__link
+      position: static
+      width: 100%
+      opacity: 1
+      justify-content: flex-end
+      margin: 8px 0 20px 0
+      color: $lightBlue
+      display: flex
+      align-items: center
+      .link-text
+        display: block
+        margin-right: 8px
+      
 </style>

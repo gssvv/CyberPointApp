@@ -85,6 +85,13 @@ export default {
   watch: {
     activePopup: function(val) {
       document.body.style.overflow = val ? 'hidden' : ''
+      if(!val) {
+        history.pushState(
+          {},
+          null,
+          this.$route.path
+        )
+      }
     }
   },
   created() {
@@ -92,6 +99,13 @@ export default {
     this.pagination = this.tourneysArray.length || 1
     this.paramsTemplate = this.gameInfo.paramsTemplate
     this.$on('goToTourney', id => {
+      const host = location.protocol + '//' + location.host
+      
+      history.pushState(
+        {},
+        null,
+        host + `/tournament/${id}`
+      )
       this.activePopup = true
     })
   },

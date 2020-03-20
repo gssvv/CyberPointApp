@@ -66,10 +66,6 @@ export default {
         margin-left: 5px
     .block-content
       display: grid
-      grid-template-columns: repeat(3,1fr)
+      grid-template-columns: 1fr
       grid-gap: 20px 15px
-      @include respond-to(lg)
-        grid-template-columns: 1fr 1fr
-      @include respond-to(md)
-        grid-template-columns: 1fr 
 </style>

@@ -60,6 +60,7 @@ export default {
       if (this.link) {
         return this.$router.push({ path: `/tournament/${this.tourney.id}` })
       }
+      
       await this.$store.dispatch('setFullTournament', id)
       this.$parent.$emit('goToTourney', id)
     }

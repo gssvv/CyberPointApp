@@ -214,7 +214,8 @@ class Bot {
       date: { $gt: new Date() }
     })
       .select({ link: 1 })
-      .limit(1000)
+      .sort({ date: -1 })
+      .limit(5000)
       .catch(err => console.log('Bot error: ', err))
 
     this.links = this.links.filter(link => {

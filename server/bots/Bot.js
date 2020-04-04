@@ -19,6 +19,8 @@ let months = {
   дек: 'Dec'
 }
 
+const langHeaders = {'accept-language': 'en-GB,en;q=0.9,ru-RU;q=0.8,ru;q=0.7,en-US;q=0.6'}
+
 class Bot {
   constructor(options = {}) {
     this.validate(options)
@@ -69,6 +71,8 @@ class Bot {
   }
 
   async insertSingleTourney(tourney) {
+    if(new Date(tourney.date) < new Date()) return console.log('Outdated:', tourney.link)
+    
     if (this.debugMode) console.log('Inserting...', tourney)
 
     tourney.id = (await this.getLastTourneyId()) + 1
@@ -111,7 +115,8 @@ class Bot {
    */
   async getLinks() {
     const page = await this.browser.newPage()
-
+    page.setExtraHTTPHeaders(langHeaders)
+    
     for (let inputPage of this.inputPages) {
       console.log(`Parsing ${inputPage.name} tourneys...`)
       await page.goto(inputPage.link)
@@ -149,6 +154,7 @@ class Bot {
    */
   async parseTourneysUsingLinks() {
     const page = await this.browser.newPage()
+    page.setExtraHTTPHeaders(langHeaders)
 
     for (let link of this.links) {
       console.log(`Visiting ${link}`)
@@ -210,8 +216,7 @@ class Bot {
   async excludeExistingTourneys() {
     let linksInitially = this.links.length
     let existingTourneys = await Tourney.find({
-      organisator: this.organisator,
-      date: { $gt: new Date() }
+      organisator: this.organisator
     })
       .select({ link: 1 })
       .sort({ date: -1 })

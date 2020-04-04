@@ -176,5 +176,8 @@ module.exports = new EpulzeBot({
   linksParser,
   handlers,
   organisator: 'Epulze',
-  botName: 'EpulzeBot'
+  botName: 'EpulzeBot',
+  // debugMode: true
 })
+
+// module.exports.start()

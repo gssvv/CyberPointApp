@@ -82,10 +82,8 @@ const handlers = {
   date: {
     selector:
       'league-information .c-league-information__wrapper--timeline .o-flag__body format-date',
-    browserFormatter: val => val[0].innerText.split(', ')[1],
+    browserFormatter: val => val[0].innerText.split(', ').splice(1).join(' '),
     serverFormatter(field) {
-      // field = val.split(' ')
-      // field[1] = months[field[1]] // replace month to russian locale
       return dayjs(field).$d
     }
   },
@@ -112,5 +110,8 @@ module.exports = new ESLBot({
   linksParser,
   handlers,
   organisator: 'ESL',
-  botName: 'ESLBot'
+  botName: 'ESLBot',
+  // debug: true,
 })
+
+// module.exports.start(false)

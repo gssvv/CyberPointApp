@@ -17,8 +17,8 @@ const settings =
 
 mongoose
   .connect(
-    // 'mongodb://46.101.24.197:27017/cybpoint',
-    'mongodb://localhost:27017/cybpoint',
+    'mongodb://46.101.24.197:27017/cybpoint',
+    // 'mongodb://localhost:27017/cybpoint',
     settings
   )
   .then(() => console.log('Connected to MongoDB...'))

@@ -62,7 +62,8 @@ const tourneySchema = new mongoose.Schema({
     type: String,
     minlength: 5,
     maxlength: 255,
-    required: true
+    required: true,
+    unique: true,
   },
   block1: {
     type: String,

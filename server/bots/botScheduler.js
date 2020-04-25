@@ -8,7 +8,11 @@ require('colors')
 
 console.log('Starting Scheduler...')
 
-module.exports = schedule.scheduleJob('0 0 0,6,12,18 * * *', async fireDate => {
+module.exports = schedule.scheduleJob('0 0 0,6,12,18 * * *', parse)
+
+// parse()
+
+async function parse(fireDate) {
   let date = dayjs(fireDate)
 
   console.log(
@@ -45,4 +49,4 @@ module.exports = schedule.scheduleJob('0 0 0,6,12,18 * * *', async fireDate => {
       .add(6, 'hour')
       .format('YYYY-MM-DD HH:mm:ss')}`
   )
-})
+}

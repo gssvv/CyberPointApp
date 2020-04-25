@@ -102,7 +102,7 @@ const handlers = {
   },
   game: {
     serverFormatter: (field, { title }) => {
-      let match = title.match(/(Dota 2)|(CS:GO)/i)
+      let match = title.match(/(Dota 2)|(CS:GО)/i)
       let result = ''
       if (!match) {
         result = title.match(/(Captаins)/i) ? 'Dota 2' : null
@@ -126,7 +126,7 @@ const handlers = {
       '.ShortTournamentInfo--isNotDynamicPrize__3u .ShortTournamentInfo--smallText__1s',
     browserFormatter: val => {
       let text = val[0].innerText
-      let match = text.match(/(skins)|(gift cards)/i)
+      let match = text.match(/(skins)|(gift cards)|(steam сертификаты)/i)
       let string = match[0].charAt(0).toUpperCase() + match[0].slice(1)
 
       return string
@@ -163,7 +163,7 @@ module.exports = new EpulzeBot({
   linksParser,
   handlers,
   organisator: 'Weplay',
-  botName: 'WeplayBot'
+  botName: 'WeplayBot',
   // debugMode: true
 })
 

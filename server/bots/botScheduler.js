@@ -22,7 +22,7 @@ async function parse(fireDate) {
   let reports = []
 
   reports.push(await EslBot.start())
-  reports.push(await WeplayBot.start())
+  // reports.push(await WeplayBot.start())
   reports.push(await ChallangermodeBot.start())
   reports.push(await EpulzeBot.start())
 
